@@ -19,7 +19,7 @@ public class JWTServiceJJWTTest extends BaseTest {
 
 	@BeforeEach
 	public void setUp() {
-		jwtService = new JwtServiceJJWT("secret", SignatureAlgorithm.HS512, expireMinutes,
+		jwtService = new JwtServiceJJWT(new JwtConfig("secret", SignatureAlgorithm.HS512.getValue(), expireMinutes),
                 new CoreJsonProvider(new JacksonJsonSerializerService()));
 	}
 

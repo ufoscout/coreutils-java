@@ -31,6 +31,7 @@
 
     <modules>
         <module>auth</module>
+        <module>cache</module>
         <module>json</module>
         <module>jwt</module>
     </modules>
@@ -42,6 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- dependency versions -->
+        <ehcache.version>3.5.2</ehcache.version>
         <jackson.version>2.9.5</jackson.version>
         <jjwt.version>0.9.0</jjwt.version>
         <junit.version>5.1.1</junit.version>
@@ -78,6 +80,11 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>${ehcache.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

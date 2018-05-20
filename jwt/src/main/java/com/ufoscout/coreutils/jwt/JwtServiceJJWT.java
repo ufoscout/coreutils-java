@@ -20,13 +20,12 @@ public class JwtServiceJJWT implements JwtService {
     private long tokenValidityMinutes;
     private final JsonProvider jsonProvider;
 
-    public JwtServiceJJWT(String secret,
-            SignatureAlgorithm signatureAlgorithm,
-            long tokenValidityMinutes,
+    public JwtServiceJJWT(
+            JwtConfig jwtConfig,
             final JsonProvider jsonSerializerService) {
-        this.secret = secret;
-        this.signatureAlgorithm = signatureAlgorithm;
-        this.tokenValidityMinutes = tokenValidityMinutes;
+        this.secret = jwtConfig.getSecret();
+        this.signatureAlgorithm = SignatureAlgorithm.forName(jwtConfig.getSignatureAlgorithm());
+        this.tokenValidityMinutes = jwtConfig.getTokenValidityMinutes();
         this.jsonProvider = jsonSerializerService;
 
     }
