@@ -7,12 +7,12 @@ import java.util.List;
  *
  * @author Francesco Cina'
  */
-public class UserContext {
+public class User {
 
     private final String username;
     private final String[] roles;
 
-    public UserContext(String username, String[] roles) {
+    public User(String username, String[] roles) {
         this.username = username;
         this.roles = roles;
     }

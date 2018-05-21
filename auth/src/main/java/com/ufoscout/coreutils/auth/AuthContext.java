@@ -4,10 +4,10 @@ import java.util.Map;
 
 public final class AuthContext {
 
-    private final UserContext user;
+    private final User user;
     private final Map<String, String[]> permissionsMap;
 
-    public AuthContext( UserContext user,  Map permissionsMap) {
+    public AuthContext( User user,  Map<String, String[]> permissionsMap) {
         this.user = user;
         this.permissionsMap = permissionsMap;
     }
@@ -126,13 +126,8 @@ public final class AuthContext {
     }
 
     
-    public final UserContext getUser() {
+    public final User getUser() {
         return this.user;
-    }
-
-    
-    public final Map<String, String[]> getPermissionsMap() {
-        return this.permissionsMap;
     }
 
 }
