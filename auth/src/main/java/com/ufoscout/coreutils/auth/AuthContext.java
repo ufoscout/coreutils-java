@@ -5,11 +5,11 @@ import java.util.List;
 
 public final class AuthContext<R> {
 
-    private final User<R> user;
+    private final Auth<R> user;
     private final List<String> userRoles = new ArrayList<>();
     private final List<String> userPermissions = new ArrayList<>();
 
-    public AuthContext( User<R> user, AuthDecoder<R> authDecoder) {
+    public AuthContext( Auth<R> user, AuthDecoder<R> authDecoder) {
         this.user = user;
         for (Role role: authDecoder.decode(user.getRoles())) {
             userRoles.add(role.getName());
@@ -112,7 +112,7 @@ public final class AuthContext<R> {
         return userPermissions.contains(permission);
     }
 
-    public final User getUser() {
+    public final Auth getAuth() {
         return this.user;
     }
 

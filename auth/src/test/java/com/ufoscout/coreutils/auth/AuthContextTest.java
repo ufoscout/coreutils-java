@@ -8,13 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.junit.jupiter.api.Test;
 
 public final class AuthContextTest extends BaseTest {
 
     @Test
     public final void shouldBeAuthenticated() {
-        User<String[]> user = new User<>("name", new String[0]);
+        Auth<String[]> user = new User("name", new String[0]);
         AuthContext<String[]> authContext = new AuthContext<String[]>(user, new Dec(new HashMap<>()));
         authContext.isAuthenticated();
     }
@@ -183,6 +185,13 @@ public final class AuthContextTest extends BaseTest {
                     AuthContext authContext = new AuthContext(user, new Dec(permissions));
                     authContext.hasAllPermissions(new String[]{"delete", "superDelete"});
                 });
+    }
+
+    @Getter
+    @AllArgsConstructor
+    class User implements Auth<String[]> {
+        private String username;
+        private String[] roles;
     }
 
     class Dec implements AuthDecoder<String[]> {

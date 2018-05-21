@@ -57,7 +57,7 @@ public class AuthServiceImpl<R> implements AuthService<R> {
     }
 
     @Override
-    public AuthContext<R> auth(User<R> user) {
+    public AuthContext<R> auth(Auth<R> user) {
         return new AuthContext<>(user, this);
     }
 

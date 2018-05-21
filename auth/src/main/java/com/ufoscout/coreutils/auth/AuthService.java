@@ -14,6 +14,6 @@ public interface AuthService<R> extends AuthDecoder<R> {
      */
     R encode(String... roleNames);
 
-    AuthContext<R> auth(User<R> user);
+    AuthContext<R> auth(Auth<R> user);
 
 }
