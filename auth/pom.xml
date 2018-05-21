@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.ufoscout</groupId>
         <artifactId>coreutils</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.1.0</version>
     </parent>
 
     <artifactId>coreutils-auth</artifactId>
