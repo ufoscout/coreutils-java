@@ -1,5 +1,9 @@
 package com.ufoscout.coreutils.auth;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map.Entry;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -11,8 +15,8 @@ public final class AuthContextTest extends BaseTest {
 
     @Test
     public final void shouldBeAuthenticated() {
-        User user = new User("name", new String[0]);
-        AuthContext authContext = new AuthContext(user, new HashMap<>());
+        User<String[]> user = new User<>("name", new String[0]);
+        AuthContext<String[]> authContext = new AuthContext<String[]>(user, new Dec(new HashMap<>()));
         authContext.isAuthenticated();
     }
 
@@ -21,17 +25,18 @@ public final class AuthContextTest extends BaseTest {
         assertThrows(UnauthenticatedException.class,
                 ()->{
                     User user = new User("", new String[0]);
-                    AuthContext authContext = new AuthContext(user, new HashMap<>());
+                    AuthContext authContext = new AuthContext(user, new Dec());
                     authContext.isAuthenticated();
                 });
     }
 
+    /*
     @Test
     public final void shouldBeNotAuthenticatedEvenIfHasRole() {
         assertThrows(UnauthenticatedException.class,
                 ()->{
                     User user = new User("", new String[]{"ADMIN"});
-                    AuthContext authContext = new AuthContext(user, new HashMap<>());
+                    AuthContext authContext = new AuthContext(user, new Dec());
                     authContext.hasRole("ADMIN");
                 });
     }
@@ -39,14 +44,14 @@ public final class AuthContextTest extends BaseTest {
     @Test
     public final void shouldHaveRole() {
         User user = new User("name", new String[]{"ADMIN"});
-        AuthContext authContext = new AuthContext(user, new HashMap<>());
+        AuthContext authContext = new AuthContext(user, new Dec());
         authContext.hasRole("ADMIN");
     }
 
     @Test
     public final void shouldHaveRole2() {
         User user = new User("name", new String[]{"ADMIN", "USER"});
-        AuthContext authContext = new AuthContext(user, new HashMap<>());
+        AuthContext authContext = new AuthContext(user, new Dec());
         authContext.hasRole("USER");
     }
 
@@ -181,4 +186,27 @@ public final class AuthContextTest extends BaseTest {
                     authContext.hasAllPermissions(new String[]{"delete", "superDelete"});
                 });
     }
+    */
+
+    class Dec implements AuthDecoder<String[]> {
+
+        private final Map<String, String[]> roles;
+
+        Dec() { this(new HashMap<>()); }
+        Dec(Map<String, String[]> roles) { this.roles = roles; }
+
+        @Override
+        public List<Role> decode(String[] userRoles) {
+            int count = 0;
+            List<Role> result = new ArrayList<>();
+
+            for (String userRole : userRoles) {
+                if (roles.containsKey(userRole)) {
+                    result.add(new Role(count++, userRole, roles.get(userRole)));
+                }
+            }
+            return result;
+        }
+    }
+
 }

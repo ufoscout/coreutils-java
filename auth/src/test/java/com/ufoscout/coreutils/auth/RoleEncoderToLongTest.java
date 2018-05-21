@@ -6,37 +6,37 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class RoleEncoderTest extends BaseTest{
+public class RoleEncoderToLongTest extends BaseTest{
 
     @Test
     public void shouldEncode01() {
-        RolesEncoder service = service(() -> Arrays.asList(
+        AuthService<Long> service = service(() -> Arrays.asList(
                 new Role(0, "ADMIN", new String[0]),
                 new Role(1, "USER", new String[0])
         ));
 
-        assertEquals(1l, service.encode("ADMIN"));
-        assertEquals(2l, service.encode("USER"));
-        assertEquals(3l, service.encode("ADMIN", "USER"));
-        assertEquals(3l, service.encode("ADMIN", "USER", "ADMIN", "USER"));
-        assertEquals(0l, service.encode("ADMIN_WRONG"));
+        assertEquals(1l, service.encode("ADMIN").longValue());
+        assertEquals(2l, service.encode("USER").longValue());
+        assertEquals(3l, service.encode("ADMIN", "USER").longValue());
+        assertEquals(3l, service.encode("ADMIN", "USER", "ADMIN", "USER").longValue());
+        assertEquals(0l, service.encode("ADMIN_WRONG").longValue());
     }
 
     @Test
     public void shouldEncode02() {
-        RolesEncoder service = service(() -> Arrays.asList(
+        AuthService<Long> service = service(() -> Arrays.asList(
                 new Role(0, "ADMIN", new String[0]),
                 new Role(2, "USER", new String[0])
         ));
 
-        assertEquals(1l, service.encode("ADMIN"));
-        assertEquals(4l, service.encode("USER"));
-        assertEquals(5l, service.encode("ADMIN", "USER"));
+        assertEquals(1l, service.encode("ADMIN").longValue());
+        assertEquals(4l, service.encode("USER").longValue());
+        assertEquals(5l, service.encode("ADMIN", "USER").longValue());
     }
 
     @Test
     public void shouldDecode01() {
-        RolesEncoder service = service(() -> Arrays.asList(
+        AuthService<Long> service = service(() -> Arrays.asList(
                 new Role(0, "ADMIN", new String[0]),
                 new Role(1, "USER", new String[0])
         ));
@@ -47,10 +47,10 @@ class RoleEncoderTest extends BaseTest{
         assertEquivalent(new String[0], service.decode(1_000_000l));
     }
 
-    private RolesEncoder service(RolesProvider provider) {
-        AuthService service = new AuthServiceImpl(provider);
+    private AuthService<Long> service(RolesProvider provider) {
+        AuthService<Long> service = new AuthServiceImpl(provider, new RolesEncoderToLong());
         service.start();
-        return service.encoder();
+        return service;
     }
 
     private void assertEquivalent(String[] expected, List<Role> found) {

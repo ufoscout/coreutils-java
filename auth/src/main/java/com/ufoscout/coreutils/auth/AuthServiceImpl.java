@@ -8,14 +8,15 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class AuthServiceImpl implements AuthService {
+public class AuthServiceImpl<R> implements AuthService<R> {
 
     private final RolesProvider provider;
+    private final RolesEncoder<R> encoder;
     private volatile RoleStore store;
-    private volatile RolesEncoder encoder;
 
-    public AuthServiceImpl(RolesProvider provider) {
+    public AuthServiceImpl(RolesProvider provider, RolesEncoder<R> encoder) {
         this.provider = provider;
+        this.encoder = encoder;
     }
 
     @Override
@@ -42,18 +43,22 @@ public class AuthServiceImpl implements AuthService {
             });
 
             this.store = new RoleStore(Collections.unmodifiableList(roles), Collections.unmodifiableMap(rolesMap), rolesArray);
-            this.encoder = new RolesEncoderImpl(this.store);
         }
     }
 
     @Override
-    public RolesEncoder encoder() {
-        return encoder;
+    public R encode(String... roleNames) {
+        return encoder.encode(store, roleNames);
     }
 
     @Override
-    public AuthContext auth(User user) {
-        return null;
+    public List<Role> decode(R roles) {
+        return encoder.decode(store, roles);
+    }
+
+    @Override
+    public AuthContext<R> auth(User<R> user) {
+        return new AuthContext<>(user, this);
     }
 
     RoleStore getRolesStore() {

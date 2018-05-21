@@ -5,16 +5,10 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class RolesEncoderImpl implements RolesEncoder {
-
-    private final RoleStore store;
-
-    RolesEncoderImpl(RoleStore store) {
-        this.store = store;
-    }
+public class RolesEncoderToLong implements RolesEncoder<Long> {
 
     @Override
-    public long encode(String... roleNames) {
+    public Long encode(RoleStore store, String... roleNames) {
         long result = 0l;
         for (String roleName : roleNames) {
             Role role = store.byName.get(roleName);
@@ -28,10 +22,11 @@ public class RolesEncoderImpl implements RolesEncoder {
     }
 
     @Override
-    public List<Role> decode(long roles) {
+    public List<Role> decode(RoleStore store, Long roles) {
+        long longRole = roles.longValue();
         List<Role> result = new ArrayList<>();
         for (int i=0; i<store.byId.length; i++) {
-            if ((roles & (1l << i)) != 0) {
+            if ((longRole & (1l << i)) != 0) {
                 result.add(store.byId[i]);
             }
         }

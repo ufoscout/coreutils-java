@@ -1,13 +1,19 @@
 package com.ufoscout.coreutils.auth;
 
-public interface AuthService {
+public interface AuthService<R> extends AuthDecoder<R> {
 
     void start();
 
     void refresh();
 
-    RolesEncoder encoder();
+    /**
+     * Returns the encoded representation of a set of {@link Role}s.
+     *
+     * @param roleNames
+     * @return
+     */
+    R encode(String... roleNames);
 
-    AuthContext auth(User user);
+    AuthContext<R> auth(User<R> user);
 
 }

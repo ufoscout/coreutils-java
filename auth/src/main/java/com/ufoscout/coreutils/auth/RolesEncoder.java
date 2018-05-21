@@ -2,21 +2,21 @@ package com.ufoscout.coreutils.auth;
 
 import java.util.List;
 
-public interface RolesEncoder {
+public interface RolesEncoder<R> {
 
     /**
-     * Returns a numeric representation of a set of {@link Role}s.
+     * Returns the encoded representation of a set of {@link Role}s.
      *
      * @param roleNames
      * @return
      */
-    long encode(String... roleNames);
+    R encode(RoleStore store, String... roleNames);
 
     /**
-     * Returns the list of {@link Role}s from a numerical representation
+     * Returns the list of {@link Role}s from the encoded representation
      * @param roles
      * @return
      */
-    List<Role> decode(long roles);
+    List<Role> decode(RoleStore store, R roles);
 
 }

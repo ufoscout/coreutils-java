@@ -1,15 +1,22 @@
 package com.ufoscout.coreutils.auth;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-public final class AuthContext {
+public final class AuthContext<R> {
 
-    private final User user;
-    private final Map<String, String[]> permissionsMap;
+    private final User<R> user;
+    private final List<String> userRoles = new ArrayList<>();
+    private final List<String> userPermissions = new ArrayList<>();
 
-    public AuthContext( User user,  Map<String, String[]> permissionsMap) {
+    public AuthContext( User<R> user, AuthDecoder<R> authDecoder) {
         this.user = user;
-        this.permissionsMap = permissionsMap;
+        for (Role role: authDecoder.decode(user.getRoles())) {
+            userRoles.add(role.getName());
+            for (String permission : role.getPermissions()) {
+                userPermissions.add(permission);
+            }
+        }
     }
     
     public final AuthContext isAuthenticated() {
@@ -98,34 +105,13 @@ public final class AuthContext {
     }
 
     private final boolean booleanHasRole(String role) {
-        String[] roles = this.user.getRoles();
-
-        for(int var3 = 0; var3 < roles.length; ++var3) {
-            String userRole = roles[var3];
-            if (userRole.equals(role)) {
-                return true;
-            }
-        }
-
-        return false;
+        return userRoles.contains(role);
     }
 
     private final boolean booleanHasPermission(String permission) {
-        String[] permissionRoles = this.permissionsMap.get(permission);
-        if (permissionRoles != null) {
-
-            for(int i = 0; i < permissionRoles.length; ++i) {
-                String permissionRole = permissionRoles[i];
-                if (this.booleanHasRole(permissionRole)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return userPermissions.contains(permission);
     }
 
-    
     public final User getUser() {
         return this.user;
     }

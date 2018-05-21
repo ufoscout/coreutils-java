@@ -7,12 +7,12 @@ import java.util.List;
  *
  * @author Francesco Cina'
  */
-public class User {
+public class User<R> {
 
     private final String username;
-    private final String[] roles;
+    private final R roles;
 
-    public User(String username, String[] roles) {
+    public User(String username, R roles) {
         this.username = username;
         this.roles = roles;
     }
@@ -21,7 +21,7 @@ public class User {
         return username;
     }
 
-    public String[] getRoles() {
+    public R getRoles() {
         return roles;
     }
 
