@@ -4,7 +4,7 @@
 
   <groupId>com.ufoscout</groupId>
   <artifactId>coreutils</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>coreutils</name>
@@ -225,7 +225,7 @@
   <scm>
     <connection>scm:git:ssh://github.com/ufoscout/java-coreutils.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/ufoscout/java-coreutils.git</developerConnection>
-    <tag>1.1.1</tag>
+    <tag>HEAD</tag>
     <url>http://github.com/ufoscout/java-coreutils</url>
   </scm>
 
