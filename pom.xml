@@ -61,6 +61,8 @@
     <maven-failsafe-plugin.version>${maven-surefire-plugin.version}</maven-failsafe-plugin.version>
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
     <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+    <nexus-staging-maven-plugin>1.6.8</nexus-staging-maven-plugin>
+    
   </properties>
 
   <dependencyManagement>
@@ -173,6 +175,17 @@
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <tagNameFormat>@{project.version}</tagNameFormat>
           <arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>${nexus-staging-maven-plugin}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <serverId>nexus-sonatype-release</serverId>
+          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
         </configuration>
       </plugin>
       <plugin>
