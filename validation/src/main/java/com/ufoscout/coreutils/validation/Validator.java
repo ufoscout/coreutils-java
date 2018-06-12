@@ -34,21 +34,4 @@ public interface Validator<T> {
 	 */
 	Validator<T> addRule(ValidationRule<T> validationRule);
 
-	/**
-	 * Set the validation groups to use.
-	 * Dafault is {@link javax.validation.groups.Default}
-	 * 
-	 * @param groups
-	 * @return
-	 */
-	Validator<T> groups(Class<?>... groups);
-
-	/**
-	 * Validate a bean property.
-	 *
-	 * @param propertyName
-	 * @return
-	 */
-	ValidationResult<T> validateProperty(String propertyName);
-
 }

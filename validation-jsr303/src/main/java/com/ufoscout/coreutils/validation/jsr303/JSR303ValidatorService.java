@@ -20,7 +20,7 @@ public class JSR303ValidatorService implements ValidatorService {
 	private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
 	@Override
-	public <T> Validator<T> validator(final T data) {
+	public <T> JSR303Validator<T> validator(final T data) {
 		return new JSR303Validator<T>(data, factory.getValidator());
 	}
 

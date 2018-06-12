@@ -21,7 +21,7 @@ public class JSR303ValidationException extends ValidationException {
 	private final Set<ConstraintViolation<?>> constraintViolations;
 
 	public JSR303ValidationException(final ValidationResult<?> validationResult, final Set<ConstraintViolation<?>> constraintViolations) {
-		super(validationResult.getValidatedBean(), validationResult.getViolations());
+		super(validationResult);
 		this.constraintViolations = constraintViolations;
 	}
 

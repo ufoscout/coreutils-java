@@ -13,9 +13,8 @@ import java.util.Map;
  * @author Francesco Cina
  * @version $Revision
  */
-public class ValidationResult<T> implements Serializable {
+public class ValidationResult<T> {
 
-	private static final long serialVersionUID = 1L;
 	private final Map<String, List<String>> violations;
 	private final T validatedBean;
 

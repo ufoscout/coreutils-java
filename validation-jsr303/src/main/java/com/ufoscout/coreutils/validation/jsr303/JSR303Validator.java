@@ -38,7 +38,6 @@ public class JSR303Validator<T> implements Validator<T> {
 		return data;
 	}
 
-	@Override
 	public ValidationResult<T> validateProperty(final String propertyName) {
 		return doValidation(new ValidateAction<T>() {
 			javax.validation.Validator _validator = getValidator();
@@ -139,7 +138,6 @@ public class JSR303Validator<T> implements Validator<T> {
 		return new JSR303ValidationResult<T>(new ValidationResult<T>(this.data, errors), violations);
 	}
 
-	@Override
 	public Validator<T> groups(final Class<?>... groups) {
 		this._groups = groups;
 		return this;
