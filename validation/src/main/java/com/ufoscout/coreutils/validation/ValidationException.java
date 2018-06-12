@@ -14,12 +14,12 @@ import java.util.Map;
  * @author Francesco Cina
  * @version $Revision
  */
-public abstract class ValidationException extends RuntimeException {
+public class ValidationException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
-	private ValidationResultImpl<?> validationResult;
+	private ValidationResult<?> validationResult;
 
-	public ValidationException(final ValidationResultImpl<?> validationResult) {
+	public ValidationException(final ValidationResult<?> validationResult) {
 		super("Bean validation exception");
 		this.validationResult = validationResult;
 	}

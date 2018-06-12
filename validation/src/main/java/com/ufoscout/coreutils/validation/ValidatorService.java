@@ -12,10 +12,10 @@ package com.ufoscout.coreutils.validation;
 public interface ValidatorService {
 
 	/**
-	 * Create a new stateless Thread safe validator
+	 * Create a new validator builder
 	 * 
 	 * @return
 	 */
-	<T> Validator<T> validator(ValidationRule<T>... rules);
+	<T> ValidatorBuilder<T> validator();
 
 }

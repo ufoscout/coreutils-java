@@ -28,7 +28,12 @@ public class ValidationResultImpl<T> implements ValidationResult<T>, ViolationMa
 		return this.validatedBean;
 	}
 
-	@Override
+    @Override
+    public boolean success() {
+        return violations.isEmpty();
+    }
+
+    @Override
 	public Map<String, List<String>> getViolations() {
 		return this.violations;
 	}

@@ -1,7 +1,5 @@
 package com.ufoscout.coreutils.validation.jsr303;
 
-import com.ufoscout.coreutils.validation.ValidationRule;
-import com.ufoscout.coreutils.validation.Validator;
 import com.ufoscout.coreutils.validation.ValidatorService;
 
 import javax.validation.Validation;
@@ -21,8 +19,8 @@ public class JSR303ValidatorService implements ValidatorService {
 	private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
 	@Override
-	public <T> JSR303Validator<T> validator(ValidationRule<T>... rules) {
-		return new JSR303Validator<T>(rules, factory.getValidator());
+	public <T> JSR303ValidatorBuilder<T> validator() {
+		return new JSR303ValidatorImpl<T>(factory.getValidator());
 	}
 
 }
