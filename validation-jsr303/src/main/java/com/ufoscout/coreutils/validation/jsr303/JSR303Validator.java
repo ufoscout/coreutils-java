@@ -98,7 +98,7 @@ public class JSR303Validator<T> implements Validator<T> {
 			}
 		});
 		if (!validationResult.getValidationResult().getViolations().isEmpty()) {
-			throw new JSR303ViolationException(validationResult.getValidationResult(), validationResult.getViolations());
+			throw new JSR303ValidationException(validationResult.getValidationResult(), validationResult.getViolations());
 		}
 	}
 

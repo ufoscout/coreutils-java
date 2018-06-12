@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Francesco Cina
  * @version $Revision
  */
-public class JSR303ValidationServiceTest extends BaseTest {
+public class JSR303ValidatorServiceTest extends BaseTest {
 
-	private final ValidationService validationService = new JSR303ValidationService();
+	private final ValidatorService validationService = new JSR303ValidatorService();
 
 	@Test
 	public void testBeanValidation() {

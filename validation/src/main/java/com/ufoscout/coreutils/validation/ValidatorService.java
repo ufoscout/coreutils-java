@@ -9,7 +9,7 @@ package com.ufoscout.coreutils.validation;
  * @author Francesco Cina
  * @version $Revision
  */
-public interface ValidationService {
+public interface ValidatorService {
 
 	/**
 	 * Validate an object and, if needed, return a map of validation errors

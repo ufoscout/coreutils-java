@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.ufoscout</groupId>
+    <groupId>com.ufoscout.coreutils</groupId>
     <artifactId>coreutils</artifactId>
     <version>1.2.1-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -37,6 +37,7 @@
         <module>jwt</module>
         <module>jwt-kotlin</module>
         <module>validation</module>
+        <module>validation-jsr303</module>
     </modules>
 
     <properties>

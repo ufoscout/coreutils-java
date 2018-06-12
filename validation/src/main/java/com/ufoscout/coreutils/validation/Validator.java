@@ -19,12 +19,12 @@ public interface Validator<T> {
 	ValidationResult<T> validate();
 
 	/**
-	 * Validate the bean. If there are validation errors a {@link ViolationException}
+	 * Validate the bean. If there are validation errors a {@link ValidationException}
 	 * containing the {@link ValidationResult} is thrown
 	 * 
-	 * @throws {@link ViolationException} if there are validation errors
+	 * @throws {@link ValidationException} if there are validation errors
 	 */
-	void validateThrowException() throws ViolationException;
+	void validateThrowException() throws ValidationException;
 
 	/**
 	 * Add a custom {@link ValidationRule} to be used during the validation process.

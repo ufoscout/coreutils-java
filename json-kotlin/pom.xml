@@ -3,12 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.ufoscout</groupId>
+    <groupId>com.ufoscout.coreutils</groupId>
     <artifactId>coreutils</artifactId>
     <version>1.2.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>coreutils-json-kotlin</artifactId>
+  <artifactId>json-kotlin</artifactId>
 
   <dependencies>
     <dependency>
@@ -16,8 +16,8 @@
       <artifactId>kotlin-stdlib-jdk8</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.ufoscout</groupId>
-      <artifactId>coreutils-json</artifactId>
+      <groupId>com.ufoscout.coreutils</groupId>
+      <artifactId>json</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

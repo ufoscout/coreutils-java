@@ -15,14 +15,14 @@ import java.util.Map;
  * @author Francesco Cina
  * @version $Revision
  */
-public abstract class ViolationException extends RuntimeException {
+public abstract class ValidationException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	private final Object validatedBean;
 	private final Map<String, List<String>> violations;
 
-	public ViolationException(final Object validatedBean,
-			final Map<String, List<String>> violations) {
+	public ValidationException(final Object validatedBean,
+							   final Map<String, List<String>> violations) {
 		super("Bean validation exception");
 		this.validatedBean = validatedBean;
 		this.violations = violations;

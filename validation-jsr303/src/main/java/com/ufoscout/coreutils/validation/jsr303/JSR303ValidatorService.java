@@ -1,7 +1,7 @@
 package com.ufoscout.coreutils.validation.jsr303;
 
-import com.ufoscout.coreutils.validation.ValidationService;
 import com.ufoscout.coreutils.validation.Validator;
+import com.ufoscout.coreutils.validation.ValidatorService;
 
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
@@ -15,7 +15,7 @@ import javax.validation.ValidatorFactory;
  * @author Francesco Cina
  * @version $Revision
  */
-public class JSR303ValidationService implements ValidationService {
+public class JSR303ValidatorService implements ValidatorService {
 
 	private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 

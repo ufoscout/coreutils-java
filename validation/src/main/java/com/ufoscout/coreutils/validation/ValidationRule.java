@@ -9,6 +9,7 @@ package com.ufoscout.coreutils.validation;
  * @author Francesco Cina
  * @version $Revision
  */
+@FunctionalInterface
 public interface ValidationRule<T> {
 
 	void validate(T data, ViolationManager violationManager);

@@ -1,7 +1,7 @@
 package com.ufoscout.coreutils.validation.jsr303;
 
+import com.ufoscout.coreutils.validation.ValidationException;
 import com.ufoscout.coreutils.validation.ValidationResult;
-import com.ufoscout.coreutils.validation.ViolationException;
 
 import javax.validation.ConstraintViolation;
 import java.util.Set;
@@ -15,12 +15,12 @@ import java.util.Set;
  * @author Francesco Cina
  * @version $Revision
  */
-public class JSR303ViolationException extends ViolationException {
+public class JSR303ValidationException extends ValidationException {
 
 	private static final long serialVersionUID = 1L;
 	private final Set<ConstraintViolation<?>> constraintViolations;
 
-	public JSR303ViolationException(final ValidationResult<?> validationResult, final Set<ConstraintViolation<?>> constraintViolations) {
+	public JSR303ValidationException(final ValidationResult<?> validationResult, final Set<ConstraintViolation<?>> constraintViolations) {
 		super(validationResult.getValidatedBean(), validationResult.getViolations());
 		this.constraintViolations = constraintViolations;
 	}
