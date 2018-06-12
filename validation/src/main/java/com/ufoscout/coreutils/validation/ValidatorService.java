@@ -12,11 +12,10 @@ package com.ufoscout.coreutils.validation;
 public interface ValidatorService {
 
 	/**
-	 * Validate an object and, if needed, return a map of validation errors
+	 * Create a new stateless Thread safe validator
 	 * 
-	 * @param data
 	 * @return
 	 */
-	<T> Validator<T> validator(T data);
+	<T> Validator<T> validator(ValidationRule<T>... rules);
 
 }

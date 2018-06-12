@@ -1,6 +1,6 @@
 package com.ufoscout.coreutils.validation.jsr303;
 
-import com.ufoscout.coreutils.validation.ValidationResult;
+import com.ufoscout.coreutils.validation.ValidationResultImpl;
 
 import javax.validation.ConstraintViolation;
 import java.util.Set;
@@ -16,15 +16,15 @@ import java.util.Set;
  */
 public class JSR303ValidationResult<T> {
 
-	private final ValidationResult<T> validationResult;
+	private final ValidationResultImpl<T> validationResult;
 	private final Set<ConstraintViolation<T>> violations;
 
-	public JSR303ValidationResult(final ValidationResult<T> validationResult, final Set<ConstraintViolation<T>> violations) {
+	public JSR303ValidationResult(final ValidationResultImpl<T> validationResult, final Set<ConstraintViolation<T>> violations) {
 		this.validationResult = validationResult;
 		this.violations = violations;
 	}
 
-	public ValidationResult<T> getValidationResult() {
+	public ValidationResultImpl<T> getValidationResult() {
 		return this.validationResult;
 	}
 

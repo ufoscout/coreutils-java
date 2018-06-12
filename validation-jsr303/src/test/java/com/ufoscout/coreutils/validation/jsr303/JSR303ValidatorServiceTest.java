@@ -1,13 +1,12 @@
 package com.ufoscout.coreutils.validation.jsr303;
 
+import com.ufoscout.coreutils.validation.*;
+import org.junit.jupiter.api.Test;
+
+import javax.validation.groups.Default;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.validation.groups.Default;
-
-import com.ufoscout.coreutils.validation.*;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,12 +34,12 @@ public class JSR303ValidatorServiceTest extends BaseTest {
 			@Override
 			public void validate(final Song data, final ViolationManager violationManager) {
 				if ((data.getArtist() == null) || !data.getArtist().equals("Queen")) {
-					violationManager.addViolation(data, "bad_artist", "Artist is not Queen!");
+					violationManager.addViolation("bad_artist", "Artist is not Queen!");
 				}
 			}
 		};
 
-		ValidationResult<Song> validationResult = validationService.validator(song).addRule(customValidationRule).validate();
+		ValidationResult<Song> validationResult = validationService.validator(customValidationRule).validate(song);
 		assertEquals( song , validationResult.getValidatedBean() );
 		Map<String, List<String>> errors = validationResult.getViolations();
 		assertNotNull(errors);
@@ -81,7 +80,7 @@ public class JSR303ValidatorServiceTest extends BaseTest {
 		beanOne.innerBean = new BeanOne();
 		beanOne.innerBean.beanOneList.add(new BeanOne());
 
-		ValidationResult<BeanOne> validationResult = validationService.validator(beanOne).validate();
+		ValidationResultImpl<BeanOne> validationResult = validationService.<BeanOne>validator().validate(beanOne);
 		assertEquals( beanOne,  validationResult.getValidatedBean() );
 
 		Map<String, List<String>> errors = validationResult.getViolations();
@@ -110,16 +109,16 @@ public class JSR303ValidatorServiceTest extends BaseTest {
 	public void testBeanGroup() {
 		HelloBean bean = new HelloBean();
 
-		ValidationResult<HelloBean> resultWithoutGroup = validationService.validator(bean).validate();
+		ValidationResultImpl<HelloBean> resultWithoutGroup = validationService.<HelloBean>validator().validate(bean);
 		assertNotNull( resultWithoutGroup.getViolations().get("hello") );
 		assertNotNull( resultWithoutGroup.getViolations().get("helloTwo") );
 		assertNull( resultWithoutGroup.getViolations().get("helloProfile") );
 
-		ValidationResult<HelloBean> resultWithGroup = validationService.validator(bean).groups(BeanCheck.class).validate();
+		ValidationResult<HelloBean> resultWithGroup = validationService.<HelloBean>validator().groups(BeanCheck.class).validate(bean);
 		assertNull( resultWithGroup.getViolations().get("hello") );
 		assertNotNull( resultWithGroup.getViolations().get("helloProfile") );
 
-		ValidationResult<HelloBean> resultWithMoreGroups = validationService.validator(bean).groups(Default.class, BeanCheck.class).validate();
+		ValidationResult<HelloBean> resultWithMoreGroups = validationService.<HelloBean>validator().groups(Default.class, BeanCheck.class).validate(bean);
 		assertNotNull( resultWithMoreGroups.getViolations().get("hello") );
 		assertNotNull( resultWithMoreGroups.getViolations().get("helloProfile") );
 
@@ -131,7 +130,7 @@ public class JSR303ValidatorServiceTest extends BaseTest {
 
 		HelloBean bean = new HelloBean();
 
-		ValidationResult<HelloBean> resultWithoutGroup = validationService.validator(bean).validateProperty("helloTwo");
+		ValidationResultImpl<HelloBean> resultWithoutGroup = validationService.<HelloBean>validator().validateProperty(bean,"helloTwo");
 		assertNull( resultWithoutGroup.getViolations().get("hello") );
 		assertNotNull( resultWithoutGroup.getViolations().get("helloTwo") );
 
@@ -147,7 +146,7 @@ public class JSR303ValidatorServiceTest extends BaseTest {
 
 		bean.beanOneMap.get("keyValid1").value = "good value";
 
-		ValidationResult<BeanWithMap> result = validationService.validator(bean).validate();
+		ValidationResultImpl<BeanWithMap> result = validationService.<BeanWithMap>validator().validate(bean);
 		getLogger().info("" + result.getViolations());
 
 		assertTrue(result.getViolations().containsKey("beanOneMap[key1].value"));

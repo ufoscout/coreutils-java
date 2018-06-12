@@ -1,12 +1,14 @@
 package com.ufoscout.coreutils.validation.jsr303;
 
-import com.ufoscout.coreutils.validation.ValidationResult;
+import com.ufoscout.coreutils.validation.ValidationResultImpl;
 import com.ufoscout.coreutils.validation.ValidationRule;
 import com.ufoscout.coreutils.validation.Validator;
-import com.ufoscout.coreutils.validation.ViolationManager;
 
 import javax.validation.ConstraintViolation;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * <class_description>
@@ -20,80 +22,66 @@ import java.util.*;
  */
 public class JSR303Validator<T> implements Validator<T> {
 
-	private final T data;
 	private final javax.validation.Validator validator;
-	private final List<ValidationRule<T>> validationRules = new ArrayList<ValidationRule<T>>();
+	private final ValidationRule<T>[] validationRules;
 	private Class<?>[] _groups;
 
-	public JSR303Validator(final T data, final javax.validation.Validator validator) {
-		this.data = data;
+	public JSR303Validator(ValidationRule<T>[] rules, final javax.validation.Validator validator) {
 		this.validator = validator;
+		this.validationRules = rules;
 	}
 
 	javax.validation.Validator getValidator() {
 		return validator;
 	}
 
-	T getData() {
-		return data;
-	}
-
-	public ValidationResult<T> validateProperty(final String propertyName) {
-		return doValidation(new ValidateAction<T>() {
+	public ValidationResultImpl<T> validateProperty(T data, final String propertyName) {
+		return doValidation(data, new ValidateAction<T>() {
 			javax.validation.Validator _validator = getValidator();
-			T _data = getData();
 
 			@Override
 			public Set<ConstraintViolation<T>> validateWithGroups(final Class<?>... groups) {
-				return _validator.validateProperty(_data, propertyName, groups);
+				return _validator.validateProperty(data, propertyName, groups);
 			}
 
 			@Override
 			public Set<ConstraintViolation<T>> validate() {
-				return _validator.validateProperty(_data, propertyName);
+				return _validator.validateProperty(data, propertyName);
 			}
 		}).getValidationResult();
 	}
 
 	@Override
-	public ValidationResult<T> validate() {
-		return doValidation(new ValidateAction<T>() {
+	public ValidationResultImpl<T> validate(T data) {
+		return doValidation(data, new ValidateAction<T>() {
 			javax.validation.Validator _validator = getValidator();
-			T _data = getData();
 
 			@Override
 			public Set<ConstraintViolation<T>> validateWithGroups(final Class<?>... groups) {
-				return _validator.validate(_data, groups);
+				return _validator.validate(data, groups);
 			}
 
 			@Override
 			public Set<ConstraintViolation<T>> validate() {
-				return _validator.validate(_data);
+				return _validator.validate(data);
 			}
 		}).getValidationResult();
-	}
-
-	@Override
-	public Validator<T> addRule(final ValidationRule<T> valdiationRule) {
-		this.validationRules.add(valdiationRule);
-		return this;
 	}
 
 	@Override
 	@SuppressWarnings({ "rawtypes" })
-	public void validateThrowException() {
-		final JSR303ValidationResult validationResult = doValidation(new ValidateAction<T>() {
+	public void validateThrowException(T data) {
+		final JSR303ValidationResult validationResult = doValidation(data, new ValidateAction<T>() {
 			javax.validation.Validator _validator = getValidator();
-			T _data = getData();
 
 			@Override
 			public Set<ConstraintViolation<T>> validateWithGroups(final Class<?>... groups) {
-				return _validator.validate(_data, groups);
+				return _validator.validate(data, groups);
 			}
 
 			@Override
 			public Set<ConstraintViolation<T>> validate() {
-				return _validator.validate(_data);
+				return _validator.validate(data);
 			}
 		});
 		if (!validationResult.getValidationResult().getViolations().isEmpty()) {
@@ -101,15 +89,8 @@ public class JSR303Validator<T> implements Validator<T> {
 		}
 	}
 
-	protected void addError(final String key, final String error, final Map<String, List<String>> errors) {
-		if (!errors.containsKey(key)) {
-			errors.put(key, new ArrayList<String>());
-		}
-		errors.get(key).add(error);
-	}
-
-	private JSR303ValidationResult<T> doValidation(final ValidateAction<T> action) {
-		final Map<String, List<String>> errors = new HashMap<String, List<String>>();
+	private JSR303ValidationResult<T> doValidation(final T data, final ValidateAction<T> action) {
+		ValidationResultImpl<T> result = new ValidationResultImpl<T>(data);
 
 		Set<ConstraintViolation<T>> violations;
 
@@ -124,18 +105,13 @@ public class JSR303Validator<T> implements Validator<T> {
 			final ConstraintViolation<T> violation = iter.next();
 			final String key = violation.getPropertyPath().toString();
 			final String error = violation.getMessage();
-			addError(key, error, errors);
+			result.addViolation(key, error);
 		}
 
 		for (final ValidationRule<T> validationRule : this.validationRules) {
-			validationRule.validate(this.data, new ViolationManager() {
-				@Override
-				public void addViolation(final Object validatedObject, final String key, final String message) {
-					addError(key, message, errors);
-				}
-			});
+			validationRule.validate(data, result);
 		}
-		return new JSR303ValidationResult<T>(new ValidationResult<T>(this.data, errors), violations);
+		return new JSR303ValidationResult<T>(result, violations);
 	}
 
 	public Validator<T> groups(final Class<?>... groups) {
@@ -144,11 +120,8 @@ public class JSR303Validator<T> implements Validator<T> {
 	}
 
 	interface ValidateAction<T> {
-
 		Set<ConstraintViolation<T>> validateWithGroups(Class<?>... groups);
-
 		Set<ConstraintViolation<T>> validate();
-
 	}
 
 }

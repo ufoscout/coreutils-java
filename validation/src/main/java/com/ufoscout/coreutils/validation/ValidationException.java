@@ -17,9 +17,9 @@ import java.util.Map;
 public abstract class ValidationException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
-	private ValidationResult<?> validationResult;
+	private ValidationResultImpl<?> validationResult;
 
-	public ValidationException(final ValidationResult<?> validationResult) {
+	public ValidationException(final ValidationResultImpl<?> validationResult) {
 		super("Bean validation exception");
 		this.validationResult = validationResult;
 	}
