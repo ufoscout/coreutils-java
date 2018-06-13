@@ -3,13 +3,13 @@ package com.ufoscout.coreutils.auth;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class AuthContext<R> {
+public final class AuthContext<R, U extends Auth<R>> {
 
-    private final Auth<R> user;
+    private final U user;
     private final List<String> userRoles = new ArrayList<>();
     private final List<String> userPermissions = new ArrayList<>();
 
-    public AuthContext( Auth<R> user, AuthDecoder<R> authDecoder) {
+    public AuthContext( U user, AuthDecoder<R> authDecoder) {
         this.user = user;
         for (Role role: authDecoder.decode(user.getRoles())) {
             userRoles.add(role.getName());
@@ -19,7 +19,7 @@ public final class AuthContext<R> {
         }
     }
     
-    public final AuthContext isAuthenticated() {
+    public final AuthContext<R, U> isAuthenticated() {
         String username = this.user.getUsername();
         if (username.length() == 0) {
             throw new UnauthenticatedException("User needs to be authenticated.");
@@ -29,7 +29,7 @@ public final class AuthContext<R> {
     }
 
     
-    public final AuthContext hasRole( String role) {
+    public final AuthContext<R, U> hasRole( String role) {
         this.isAuthenticated();
         if (this.booleanHasRole(role)) {
             return this;
@@ -39,7 +39,7 @@ public final class AuthContext<R> {
     }
 
     
-    public final AuthContext hasAnyRole( String... roles) {
+    public final AuthContext<R, U> hasAnyRole( String... roles) {
         this.isAuthenticated();
 
         for(int i = 0; i < roles.length; ++i) {
@@ -53,7 +53,7 @@ public final class AuthContext<R> {
     }
 
     
-    public final AuthContext hasAllRoles( String... roles) {
+    public final AuthContext<R, U> hasAllRoles( String... roles) {
         this.isAuthenticated();
 
         for(int i = 0; i < roles.length; ++i) {
@@ -67,7 +67,7 @@ public final class AuthContext<R> {
     }
 
     
-    public final AuthContext hasPermission( String permission) {
+    public final AuthContext<R, U> hasPermission( String permission) {
         this.isAuthenticated();
         if (this.booleanHasPermission(permission)) {
             return this;
@@ -77,7 +77,7 @@ public final class AuthContext<R> {
     }
 
     
-    public final AuthContext hasAnyPermission( String... permissions) {
+    public final AuthContext<R, U> hasAnyPermission( String... permissions) {
         this.isAuthenticated();
 
         for(int i = 0; i < permissions.length; ++i) {
@@ -91,7 +91,7 @@ public final class AuthContext<R> {
     }
 
     
-    public final AuthContext hasAllPermissions( String... permissions) {
+    public final AuthContext<R, U> hasAllPermissions( String... permissions) {
         this.isAuthenticated();
 
         for(int i = 0; i < permissions.length; ++i) {
@@ -112,7 +112,7 @@ public final class AuthContext<R> {
         return userPermissions.contains(permission);
     }
 
-    public final Auth getAuth() {
+    public final U getAuth() {
         return this.user;
     }
 

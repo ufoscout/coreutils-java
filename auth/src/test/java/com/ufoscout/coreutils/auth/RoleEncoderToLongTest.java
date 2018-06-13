@@ -10,7 +10,7 @@ public class RoleEncoderToLongTest extends BaseTest{
 
     @Test
     public void shouldEncode01() {
-        AuthService<Long> service = service(() -> Arrays.asList(
+        AuthService<Long, Auth<Long>> service = service(() -> Arrays.asList(
                 new Role(0, "ADMIN", new String[0]),
                 new Role(1, "USER", new String[0])
         ));
@@ -24,7 +24,7 @@ public class RoleEncoderToLongTest extends BaseTest{
 
     @Test
     public void shouldEncode02() {
-        AuthService<Long> service = service(() -> Arrays.asList(
+        AuthService<Long, Auth<Long>> service = service(() -> Arrays.asList(
                 new Role(0, "ADMIN", new String[0]),
                 new Role(2, "USER", new String[0])
         ));
@@ -36,7 +36,7 @@ public class RoleEncoderToLongTest extends BaseTest{
 
     @Test
     public void shouldDecode01() {
-        AuthService<Long> service = service(() -> Arrays.asList(
+        AuthService<Long, Auth<Long>> service = service(() -> Arrays.asList(
                 new Role(0, "ADMIN", new String[0]),
                 new Role(1, "USER", new String[0])
         ));
@@ -47,8 +47,8 @@ public class RoleEncoderToLongTest extends BaseTest{
         assertEquivalent(new String[0], service.decode(1_000_000l));
     }
 
-    private AuthService<Long> service(RolesProvider provider) {
-        AuthService<Long> service = new AuthServiceImpl(provider, new RolesEncoderToLong());
+    private AuthService<Long, Auth<Long>> service(RolesProvider provider) {
+        AuthService<Long, Auth<Long>> service = new AuthServiceImpl(provider, new RolesEncoderToLong());
         service.start();
         return service;
     }

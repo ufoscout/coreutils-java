@@ -1,6 +1,6 @@
 package com.ufoscout.coreutils.auth;
 
-public interface AuthService<R> extends AuthDecoder<R> {
+public interface AuthService<R, U extends Auth<R>> extends AuthDecoder<R> {
 
     void start();
 
@@ -14,6 +14,6 @@ public interface AuthService<R> extends AuthDecoder<R> {
      */
     R encode(String... roleNames);
 
-    AuthContext<R> auth(Auth<R> user);
+    AuthContext<R, U> auth(U user);
 
 }

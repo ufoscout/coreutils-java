@@ -17,7 +17,7 @@ public final class AuthContextTest extends BaseTest {
     @Test
     public final void shouldBeAuthenticated() {
         Auth<String[]> user = new User("name", new String[0]);
-        AuthContext<String[]> authContext = new AuthContext<String[]>(user, new Dec(new HashMap<>()));
+        AuthContext<String[], Auth<String[]>> authContext = new AuthContext<String[], Auth<String[]>>(user, new Dec(new HashMap<>()));
         authContext.isAuthenticated();
     }
 

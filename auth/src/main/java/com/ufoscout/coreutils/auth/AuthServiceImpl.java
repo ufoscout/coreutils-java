@@ -1,14 +1,11 @@
 package com.ufoscout.coreutils.auth;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.*;
+
 @Slf4j
-public class AuthServiceImpl<R> implements AuthService<R> {
+public class AuthServiceImpl<R, U extends Auth<R>> implements AuthService<R, U> {
 
     private final RolesProvider provider;
     private final RolesEncoder<R> encoder;
@@ -57,7 +54,7 @@ public class AuthServiceImpl<R> implements AuthService<R> {
     }
 
     @Override
-    public AuthContext<R> auth(Auth<R> user) {
+    public AuthContext<R, U> auth(U user) {
         return new AuthContext<>(user, this);
     }
 
