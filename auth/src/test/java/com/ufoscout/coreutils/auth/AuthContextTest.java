@@ -16,8 +16,8 @@ public final class AuthContextTest extends BaseTest {
 
     @Test
     public final void shouldBeAuthenticated() {
-        Auth<String[]> user = new User("name", new String[0]);
-        AuthContext<String[], Auth<String[]>> authContext = new AuthContext<String[], Auth<String[]>>(user, new Dec(new HashMap<>()));
+        Auth user = new Auth(0L, "name", new String[0]);
+        AuthContext authContext = new AuthContext(user, new Dec(new HashMap<>()));
         authContext.isAuthenticated();
     }
 
@@ -25,7 +25,7 @@ public final class AuthContextTest extends BaseTest {
     public final void shouldBeNotAuthenticated() {
         assertThrows(UnauthenticatedException.class,
                 ()->{
-                    User user = new User("", new String[0]);
+                    Auth user = new Auth(0L, "", new String[0]);
                     AuthContext authContext = new AuthContext(user, new Dec());
                     authContext.isAuthenticated();
                 });
@@ -35,7 +35,7 @@ public final class AuthContextTest extends BaseTest {
     public final void shouldBeNotAuthenticatedEvenIfHasRole() {
         assertThrows(UnauthenticatedException.class,
                 ()->{
-                    User user = new User("", new String[]{"ADMIN"});
+                    Auth user = new Auth(0L, "", new String[]{"ADMIN"});
                     AuthContext authContext = new AuthContext(user, new Dec());
                     authContext.hasRole("ADMIN");
                 });
@@ -43,14 +43,14 @@ public final class AuthContextTest extends BaseTest {
 
     @Test
     public final void shouldHaveRole() {
-        User user = new User("name", new String[]{"ADMIN"});
+        Auth user = new Auth(0L, "name", new String[]{"ADMIN"});
         AuthContext authContext = new AuthContext(user, new Dec());
         authContext.hasRole("ADMIN");
     }
 
     @Test
     public final void shouldHaveRole2() {
-        User user = new User("name", new String[]{"ADMIN", "USER"});
+        Auth user = new Auth(0L, "name", new String[]{"ADMIN", "USER"});
         AuthContext authContext = new AuthContext(user, new Dec());
         authContext.hasRole("USER");
     }
@@ -59,7 +59,7 @@ public final class AuthContextTest extends BaseTest {
     public final void shouldNotHaveRole() {
         assertThrows(UnauthorizedException.class,
                 ()->{
-                    User user = new User("name", new String[]{"ADMIN"});
+                    Auth user = new Auth(0L, "name", new String[]{"ADMIN"});
                     AuthContext authContext = new AuthContext(user, new Dec());
                     authContext.hasRole("USER");
                 });
@@ -67,7 +67,7 @@ public final class AuthContextTest extends BaseTest {
 
     @Test
     public final void shouldHaveAnyRole() {
-        User user = new User("name", new String[]{"ADMIN", "USER"});
+        Auth user = new Auth(0L, "name", new String[]{"ADMIN", "USER"});
         AuthContext authContext = new AuthContext(user, new Dec());
         authContext.hasAnyRole(new String[]{"USER", "FRIEND"});
     }
@@ -76,7 +76,7 @@ public final class AuthContextTest extends BaseTest {
     public final void shouldNotHaveAnyRole() {
         assertThrows(UnauthorizedException.class,
                 ()->{
-                    User user = new User("name", new String[]{"ADMIN", "OWNER"});
+                    Auth user = new Auth(0L, "name", new String[]{"ADMIN", "OWNER"});
                     AuthContext authContext = new AuthContext(user, new Dec());
                     authContext.hasAnyRole(new String[]{"USER", "FRIEND"});
                 });
@@ -84,7 +84,7 @@ public final class AuthContextTest extends BaseTest {
 
     @Test
     public final void shouldHaveAllRoles() {
-        User user = new User("name", new String[]{"ADMIN", "USER", "FRIEND"});
+        Auth user = new Auth(0L, "name", new String[]{"ADMIN", "USER", "FRIEND"});
         AuthContext authContext = new AuthContext(user, new Dec());
         authContext.hasAllRoles(new String[]{"USER", "FRIEND"});
     }
@@ -93,7 +93,7 @@ public final class AuthContextTest extends BaseTest {
     public final void shouldNotHaveAllRoles() {
         assertThrows(UnauthorizedException.class,
                 ()->{
-                    User user = new User("name", new String[]{"ADMIN", "USER"});
+                    Auth user = new Auth(0L, "name", new String[]{"ADMIN", "USER"});
                     AuthContext authContext = new AuthContext(user, new Dec());
                     authContext.hasAllRoles(new String[]{"USER", "FRIEND"});
                 });
@@ -105,7 +105,7 @@ public final class AuthContextTest extends BaseTest {
                 ()->{
                     Map<String, List<String>> permissions = new HashMap<>();
                     permissions.put("delete", Arrays.asList("OWNER", "ADMIN"));
-                    User user = new User("", new String[]{"ADMIN"});
+                    Auth user = new Auth(0L, "", new String[]{"ADMIN"});
                     AuthContext authContext = new AuthContext(user, new Dec(permissions));
                     authContext.hasPermission("delete");
                 });
@@ -115,7 +115,7 @@ public final class AuthContextTest extends BaseTest {
     public final void shouldHavePermissions() {
         Map<String, List<String>> permissions = new HashMap<>();
         permissions.put("delete", Arrays.asList("OWNER", "ADMIN"));
-        User user = new User("name", new String[]{"ADMIN"});
+        Auth user = new Auth(0L, "name", new String[]{"ADMIN"});
         AuthContext authContext = new AuthContext(user, new Dec(permissions));
         authContext.hasPermission("delete");
     }
@@ -124,7 +124,7 @@ public final class AuthContextTest extends BaseTest {
     public final void shouldHavePermission2() {
         Map<String, List<String>> permissions = new HashMap<>();
         permissions.put("delete", Arrays.asList("OWNER", "ADMIN"));
-        User user = new User("name", new String[]{"ADMIN", "USER"});
+        Auth user = new Auth(0L, "name", new String[]{"ADMIN", "USER"});
         AuthContext authContext = new AuthContext(user, new Dec(permissions));
         authContext.hasPermission("delete");
     }
@@ -135,7 +135,7 @@ public final class AuthContextTest extends BaseTest {
                 ()->{
                     Map<String, List<String>> permissions = new HashMap<>();
                     permissions.put("delete", Arrays.asList("OWNER"));
-                    User user = new User("name", new String[]{"ADMIN", "USER"});
+                    Auth user = new Auth(0L, "name", new String[]{"ADMIN", "USER"});
                     AuthContext authContext = new AuthContext(user, new Dec(permissions));
                     authContext.hasPermission("delete");
                 });
@@ -146,7 +146,7 @@ public final class AuthContextTest extends BaseTest {
         Map<String, List<String>> permissions = new HashMap<>();
         permissions.put("delete", Arrays.asList("OWNER"));
         permissions.put("superDelete", Arrays.asList("ADMIN"));
-        User user = new User("name", new String[]{"ADMIN", "USER"});
+        Auth user = new Auth(0L, "name", new String[]{"ADMIN", "USER"});
         AuthContext authContext = new AuthContext(user, new Dec(permissions));
         authContext.hasAnyPermission("delete", "superDelete");
     }
@@ -158,7 +158,7 @@ public final class AuthContextTest extends BaseTest {
                     Map<String, List<String>> permissions = new HashMap<>();
                     permissions.put("delete", Arrays.asList("OWNER", "ADMIN"));
                     permissions.put("superDelete", Arrays.asList("ADMIN"));
-                    User user = new User("name", new String[]{"USER"});
+                    Auth user = new Auth(0L, "name", new String[]{"USER"});
                     AuthContext authContext = new AuthContext(user, new Dec(permissions));
                     authContext.hasAnyPermission("delete", "superAdmin");
                 });
@@ -169,7 +169,7 @@ public final class AuthContextTest extends BaseTest {
         Map<String, List<String>> permissions = new HashMap<>();
         permissions.put("delete", Arrays.asList("OWNER", "USER"));
         permissions.put("superDelete", Arrays.asList("ADMIN"));
-        User user = new User("name", new String[]{"ADMIN", "USER"});
+        Auth user = new Auth(0L, "name", new String[]{"ADMIN", "USER"});
         AuthContext authContext = new AuthContext(user, new Dec(permissions));
         authContext.hasAllPermissions("delete", "superDelete");
     }
@@ -181,20 +181,13 @@ public final class AuthContextTest extends BaseTest {
                     Map<String, List<String>> permissions = new HashMap<>();
                     permissions.put("delete", Arrays.asList("OWNER"));
                     permissions.put("superDelete", Arrays.asList("ADMIN"));
-                    User user = new User("name", new String[]{"ADMIN", "USER"});
+                    Auth user = new Auth(0L, "name", new String[]{"ADMIN", "USER"});
                     AuthContext authContext = new AuthContext(user, new Dec(permissions));
                     authContext.hasAllPermissions(new String[]{"delete", "superDelete"});
                 });
     }
 
-    @Getter
-    @AllArgsConstructor
-    class User implements Auth<String[]> {
-        private String username;
-        private String[] roles;
-    }
-
-    class Dec implements AuthDecoder<String[]> {
+    class Dec implements RolesProvider {
 
         private final Map<String, List<String>> permissions;
 
@@ -202,7 +195,12 @@ public final class AuthContextTest extends BaseTest {
         Dec(Map<String, List<String>> permissions) { this.permissions = permissions; }
 
         @Override
-        public List<Role> decode(String[] userRoles) {
+        public List<Role> getAll() {
+            return null;
+        }
+
+        @Override
+        public List<Role> getByName(String... userRoles) {
             int count = 0;
             List<Role> result = new ArrayList<>();
 

@@ -69,7 +69,7 @@ public class JwtServiceJJWT implements JwtService {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            throw new TokenExpiredException();
+            throw new TokenExpiredException(e);
         }
     }
 

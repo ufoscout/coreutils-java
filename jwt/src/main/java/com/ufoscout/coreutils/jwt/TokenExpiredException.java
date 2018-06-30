@@ -10,4 +10,7 @@ public class TokenExpiredException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
+    TokenExpiredException(Throwable throwable) {
+        super(throwable);
+    }
 }

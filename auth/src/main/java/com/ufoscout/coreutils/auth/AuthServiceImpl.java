@@ -5,15 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 
 @Slf4j
-public class AuthServiceImpl<R, U extends Auth<R>> implements AuthService<R, U> {
+public class AuthServiceImpl implements AuthService {
 
     private final RolesProvider provider;
-    private final RolesEncoder<R> encoder;
     private volatile RoleStore store;
 
-    public AuthServiceImpl(RolesProvider provider, RolesEncoder<R> encoder) {
+    public AuthServiceImpl(RolesProvider provider) {
         this.provider = provider;
-        this.encoder = encoder;
     }
 
     @Override
@@ -44,21 +42,21 @@ public class AuthServiceImpl<R, U extends Auth<R>> implements AuthService<R, U> 
     }
 
     @Override
-    public R encode(String... roleNames) {
-        return encoder.encode(store, roleNames);
-    }
-
-    @Override
-    public List<Role> decode(R roles) {
-        return encoder.decode(store, roles);
-    }
-
-    @Override
-    public AuthContext<R, U> auth(U user) {
-        return new AuthContext<>(user, this);
+    public AuthContext auth(Auth user) {
+        return new AuthContext(user, this);
     }
 
     RoleStore getRolesStore() {
         return this.store;
+    }
+
+    @Override
+    public List<Role> getAll() {
+        return provider.getAll();
+    }
+
+    @Override
+    public List<Role> getByName(String... roles) {
+        return provider.getByName(roles);
     }
 }
