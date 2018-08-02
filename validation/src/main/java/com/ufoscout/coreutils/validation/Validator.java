@@ -24,6 +24,6 @@ public interface Validator<T> {
 	 * 
 	 * @throws {@link ValidationException} if there are validation errors
 	 */
-	void validateThrowException(T data) throws ValidationException;
+	T validateThrowException(T data) throws ValidationException;
 
 }

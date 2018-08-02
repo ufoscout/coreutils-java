@@ -72,7 +72,7 @@ public class JSR303ValidatorImpl<T> implements JSR303Validator<T>, JSR303Validat
 
 	@Override
 	@SuppressWarnings({ "rawtypes" })
-	public void validateThrowException(T data) {
+	public T validateThrowException(T data) {
 		final JSR303ValidationResult validationResult = doValidation(data, new ValidateAction<T>() {
 			javax.validation.Validator _validator = getValidator();
 
@@ -89,6 +89,7 @@ public class JSR303ValidatorImpl<T> implements JSR303Validator<T>, JSR303Validat
 		if (!validationResult.getValidationResult().success()) {
 			throw new JSR303ValidationException(validationResult.getValidationResult(), validationResult.getViolations());
 		}
+		return data;
 	}
 
 	private JSR303ValidationResult<T> doValidation(final T data, final ValidateAction<T> action) {

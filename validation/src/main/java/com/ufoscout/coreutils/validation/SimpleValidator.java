@@ -20,11 +20,12 @@ class SimpleValidator<T> implements Validator<T>, ValidatorBuilder<T> {
     }
 
     @Override
-    public void validateThrowException(T data) throws ValidationException {
+    public T validateThrowException(T data) throws ValidationException {
         ValidationResult<T> result = validate(data);
         if (!result.getViolations().isEmpty()) {
             throw new ValidationException(result);
         }
+        return data;
     }
 
     @Override
