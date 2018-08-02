@@ -132,7 +132,7 @@ public class JSR303ValidatorImpl<T> implements JSR303Validator<T>, JSR303Validat
     }
 
     @Override
-    public JSR303Validator build() {
+    public JSR303Validator<T> build() {
         return this;
     }
 

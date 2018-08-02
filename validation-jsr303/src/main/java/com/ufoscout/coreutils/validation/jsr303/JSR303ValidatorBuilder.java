@@ -16,5 +16,5 @@ public interface JSR303ValidatorBuilder<T> extends ValidatorBuilder<T> {
      * Create a new stateless Thread safe validator
      */
     @Override
-    JSR303Validator build();
+    JSR303Validator<T> build();
 }

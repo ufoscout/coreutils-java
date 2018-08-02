@@ -9,5 +9,5 @@ public interface ValidatorBuilder<T> {
     /**
      * Create a new stateless Thread safe validator
      */
-    Validator build();
+    Validator<T> build();
 }

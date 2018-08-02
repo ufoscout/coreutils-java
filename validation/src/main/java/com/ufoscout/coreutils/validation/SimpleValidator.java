@@ -35,7 +35,7 @@ class SimpleValidator<T> implements Validator<T>, ValidatorBuilder<T> {
     }
 
     @Override
-    public Validator build() {
+    public Validator<T> build() {
         return this;
     }
 }

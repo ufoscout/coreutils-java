@@ -107,6 +107,12 @@
                 <artifactId>jjwt-impl</artifactId>
                 <version>${jjwt.version}</version>
                 <scope>runtime</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
