@@ -1,8 +1,11 @@
 package com.ufoscout.coreutils.jwt;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.impl.DefaultClock;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -14,7 +17,6 @@ import java.util.Date;
 public class JwtServiceJJWT implements JwtService {
 
     final static String PAYLOAD_CLAIM_KEY = "payload";
-    private final Clock clock = DefaultClock.INSTANCE;
     private final SignatureAlgorithm signatureAlgorithm;
     private String secret;
     private long tokenValidityMinutes;
@@ -37,7 +39,7 @@ public class JwtServiceJJWT implements JwtService {
 
     @Override
     public <T> String generate(final String subject, final T payload) {
-        final Date createdDate = clock.now();
+        final Date createdDate = new Date();
         return generate(subject, payload, createdDate, calculateExpirationDate(createdDate));
     }
 
