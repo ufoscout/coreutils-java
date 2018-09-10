@@ -104,6 +104,36 @@ public final class AuthContext {
         return this;
     }
 
+    public final AuthContext isOwner(Owned obj) {
+        if (this.user.getId().equals(obj.getOwnerId())) {
+            return this;
+        } else {
+            throw new UnauthorizedException("User [" + this.user.getUsername() + "] is not the owner. User id: [" + this.user.getId() + "], owner id: [" + obj.getOwnerId() + "]");
+        }
+    }
+
+    public final AuthContext isOwnerOrHasRole(Owned obj, String role) {
+        if (this.user.getId().equals(obj.getOwnerId())) {
+            return this;
+        } else {
+            if (booleanHasRole(role)) {
+                return this;
+            }
+            throw new UnauthorizedException("User [" + this.user.getUsername() + "] is not the owner and does not have role [" + role + "]. User id: [" + this.user.getId() + "], owner id: [" + obj.getOwnerId() + "]");
+        }
+    }
+
+    public final AuthContext isOwnerOrHasPermission(Owned obj, String permission) {
+        if (this.user.getId().equals(obj.getOwnerId())) {
+            return this;
+        } else {
+            if (booleanHasPermission(permission)) {
+                return this;
+            }
+            throw new UnauthorizedException("User [" + this.user.getUsername() + "] is not the owner and does not have permission [" + permission + "]. User id: [" + this.user.getId() + "], owner id: [" + obj.getOwnerId() + "]");
+        }
+    }
+
     private final boolean booleanHasRole(String role) {
         return userRoles.contains(role);
     }

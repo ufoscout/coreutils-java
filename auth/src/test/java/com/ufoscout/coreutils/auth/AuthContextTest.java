@@ -1,5 +1,6 @@
 package com.ufoscout.coreutils.auth;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
@@ -187,6 +188,82 @@ public final class AuthContextTest extends BaseTest {
                 });
     }
 
+    @Test
+    public final void shouldBeTheOwner() {
+        Map<String, List<String>> permissions = new HashMap<>();
+        Auth user = new Auth(0L, "name", new String[]{""});
+        AuthContext authContext = new AuthContext(user, new Dec(permissions));
+        assertNotNull(authContext.isOwner(new Owneable(0L)));
+    }
+
+    @Test
+    public final void shouldNotBeTheOwner() {
+        assertThrows(UnauthorizedException.class,
+                ()-> {
+                    Map<String, List<String>> permissions = new HashMap<>();
+                    Auth user = new Auth(0L, "name", new String[]{""});
+                    AuthContext authContext = new AuthContext(user, new Dec(permissions));
+                    assertNotNull(authContext.isOwner(new Owneable(1L)));
+                });
+    }
+
+    @Test
+    public final void shouldBeAllowedIfNotTheOwnerButHasRole() {
+        Map<String, List<String>> permissions = new HashMap<>();
+        Auth user = new Auth(0L, "name", new String[]{"ROLE_1"});
+        AuthContext authContext = new AuthContext(user, new Dec(permissions));
+        assertNotNull(authContext.isOwnerOrHasRole(new Owneable(1L), "ROLE_1"));
+    }
+
+    @Test
+    public final void shouldBeAllowedIfTheOwnerButNotHasRole() {
+        Map<String, List<String>> permissions = new HashMap<>();
+        Auth user = new Auth(0L, "name", new String[]{"ROLE_1"});
+        AuthContext authContext = new AuthContext(user, new Dec(permissions));
+        assertNotNull(authContext.isOwnerOrHasRole(new Owneable(0L), "ROLE_2"));
+    }
+
+    @Test
+    public final void shouldNotBeAllowedBecauseNotTheOwnerAndNotTheRole() {
+        assertThrows(UnauthorizedException.class,
+                ()-> {
+                    Map<String, List<String>> permissions = new HashMap<>();
+                    Auth user = new Auth(0L, "name", new String[]{"ROLE_1"});
+                    AuthContext authContext = new AuthContext(user, new Dec(permissions));
+                    assertNotNull(authContext.isOwnerOrHasRole(new Owneable(1L), "ROLE_2"));
+                });
+    }
+
+    @Test
+    public final void shouldBeAllowedIfNotTheOwnerButHasPermission() {
+        Map<String, List<String>> permissions = new HashMap<>();
+        permissions.put("access", Arrays.asList("ROLE_1"));
+        Auth user = new Auth(0L, "name", new String[]{"ROLE_1"});
+        AuthContext authContext = new AuthContext(user, new Dec(permissions));
+        assertNotNull(authContext.isOwnerOrHasPermission(new Owneable(1L), "access"));
+    }
+
+    @Test
+    public final void shouldBeAllowedIfTheOwnerButNotHasPermission() {
+        Map<String, List<String>> permissions = new HashMap<>();
+        permissions.put("access", Arrays.asList("ROLE_1"));
+        Auth user = new Auth(0L, "name", new String[]{"ROLE_1"});
+        AuthContext authContext = new AuthContext(user, new Dec(permissions));
+        assertNotNull(authContext.isOwnerOrHasPermission(new Owneable(0L), "access_2"));
+    }
+
+    @Test
+    public final void shouldNotBeAllowedBecauseNotTheOwnerAndNotThePermission() {
+        assertThrows(UnauthorizedException.class,
+                ()-> {
+                    Map<String, List<String>> permissions = new HashMap<>();
+                    permissions.put("access", Arrays.asList("ROLE_1"));
+                    Auth user = new Auth(0L, "name", new String[]{"ROLE_1"});
+                    AuthContext authContext = new AuthContext(user, new Dec(permissions));
+                    assertNotNull(authContext.isOwnerOrHasPermission(new Owneable(1L), "access_2"));
+                });
+    }
+
     class Dec implements RolesProvider {
 
         private final Map<String, List<String>> permissions;
@@ -214,6 +291,20 @@ public final class AuthContextTest extends BaseTest {
                 result.add(new Role(count++, userRole, userPerms.toArray(new String[0])));
             }
             return result;
+        }
+    }
+
+    class Owneable implements Owned {
+
+        private Long ownerId;
+
+        Owneable(Long ownerId) {
+            this.ownerId = ownerId;
+        }
+
+        @Override
+        public Long getOwnerId() {
+            return this.ownerId;
         }
     }
 
