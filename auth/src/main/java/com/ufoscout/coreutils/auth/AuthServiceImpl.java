@@ -23,21 +23,16 @@ public class AuthServiceImpl implements AuthService {
     public void refresh() {
         synchronized (this) {
 
-            List<Role> newRoles = provider.getAll();
-            int max = newRoles.stream().mapToInt(Role::getId).max().orElse(0);
-
             List<Role> roles = new ArrayList<>();
             Map<String, Role> rolesMap = new HashMap<>();
-            Role[] rolesArray = new Role[max+1];
 
             roles.addAll(provider.getAll());
 
             roles.forEach(role -> {
-                rolesArray[role.getId()] = role;
                 rolesMap.put(role.getName(), role);
             });
 
-            this.store = new RoleStore(Collections.unmodifiableList(roles), Collections.unmodifiableMap(rolesMap), rolesArray);
+            this.store = new RoleStore(Collections.unmodifiableList(roles), Collections.unmodifiableMap(rolesMap));
         }
     }
 

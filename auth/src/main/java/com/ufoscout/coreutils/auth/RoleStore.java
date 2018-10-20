@@ -9,6 +9,5 @@ public class RoleStore {
 
     public final List<Role> list;
     public final Map<String, Role> byName;
-    public final Role[] byId;
 
 }

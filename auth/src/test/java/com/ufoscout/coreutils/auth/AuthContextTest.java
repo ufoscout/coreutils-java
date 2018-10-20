@@ -278,7 +278,6 @@ public final class AuthContextTest extends BaseTest {
 
         @Override
         public List<Role> getByName(String... userRoles) {
-            int count = 0;
             List<Role> result = new ArrayList<>();
 
             for (String userRole : userRoles) {
@@ -288,7 +287,7 @@ public final class AuthContextTest extends BaseTest {
                         userPerms.add(perm.getKey());
                     }
                 }
-                result.add(new Role(count++, userRole, userPerms.toArray(new String[0])));
+                result.add(new Role(userRole, userPerms.toArray(new String[0])));
             }
             return result;
         }

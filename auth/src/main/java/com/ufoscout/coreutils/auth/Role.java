@@ -7,7 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Role {
 
-    private int id;
     private String name;
     private String[] permissions;
 
