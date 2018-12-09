@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.ufoscout.coreutils</groupId>
+        <artifactId>coreutils</artifactId>
+        <version>3.6.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.ufoscout.vertk</groupId>
+    <artifactId>vertk-parent</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>vertk-core</module>
+        <module>vertk-web-client</module>
+        <module>vertk-web</module>
+        <module>vertk-kodein</module>
+        <module>vertk-kodein-web</module>
+        <module>vertk-kodein-auth-jwt</module>
+        <module>vertk-kodein-mail</module>
+    </modules>
+
+    <properties>
+        <kodein.version>5.3.0</kodein.version>
+        <vertx.version>3.6.0</vertx.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-dependencies</artifactId>
+                <version>${vertx.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.ufoscout.coreutils</groupId>
+                <artifactId>json-kotlin</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ufoscout.coreutils</groupId>
+                <artifactId>jwt-kotlin</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ufoscout.coreutils</groupId>
+                <artifactId>auth</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ufoscout.coreutils</groupId>
+                <artifactId>validation</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-reflect</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kodein.di</groupId>
+                <artifactId>kodein-di-generic-jvm</artifactId>
+                <version>${kodein.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.kodein.di</groupId>
+                <artifactId>kodein-di-jx-inject-jvm</artifactId>
+                <version>${kodein.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>bintray</id>
+            <url>https://dl.bintray.com/kodein-framework/Kodein-DI/</url>
+        </repository>
+    </repositories>
+
+</project>
