@@ -6,6 +6,7 @@ import io.vertx.core.json.JsonObject
 import io.vertx.core.streams.ReadStream
 import io.vertx.ext.web.client.HttpRequest
 import io.vertx.ext.web.client.HttpResponse
+import io.vertx.ext.web.multipart.MultipartForm
 import io.vertx.kotlin.coroutines.awaitResult
 
 fun <T : Any> HttpRequest<T>.putHeaders(vararg headers: Pair<String, String>): HttpRequest<T> {
@@ -46,6 +47,12 @@ suspend fun <T : Any> HttpRequest<T>.awaitSendJsonObject(body: JsonObject): Http
 suspend fun <T : Any> HttpRequest<T>.awaitSendStream(body: ReadStream<Buffer>): HttpResponse<T> {
     return awaitResult<HttpResponse<T>> {
         this.sendStream(body, it)
+    }
+}
+
+suspend fun <T : Any> HttpRequest<T>.awaitSendMultipartForm(form: MultipartForm): HttpResponse<T> {
+    return awaitResult<HttpResponse<T>> {
+        this.sendMultipartForm(form, it)
     }
 }
 
