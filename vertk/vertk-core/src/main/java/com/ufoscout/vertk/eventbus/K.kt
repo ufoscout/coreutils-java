@@ -36,6 +36,15 @@ inline fun <T> EventBus.awaitConsumer(address: String, noinline handler: suspend
     }
 }
 
+/**
+ * Register the JsonMessageCodec as default message codec for the class specified.
+ *
+ * @param clazz  the class for which to use this codec
+ */
+inline fun <reified T> EventBus.registerJsonCodec() {
+    this.registerDefaultCodec(T::class.java, JsonMessageCodec.new<T>())
+}
+
 suspend fun EventBus.awaitClose() {
     awaitResult<Void> { this.close(it) }
 }
