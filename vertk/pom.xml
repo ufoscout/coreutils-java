@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.ufoscout.coreutils</groupId>
         <artifactId>coreutils</artifactId>
-        <version>3.6.3-SNAPSHOT</version>
+        <version>3.6.4</version>
     </parent>
 
     <groupId>com.ufoscout.vertk</groupId>
