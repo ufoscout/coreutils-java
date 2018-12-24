@@ -25,7 +25,7 @@
 
     <properties>
         <kodein.version>5.3.0</kodein.version>
-        <vertx.version>3.6.0</vertx.version>
+        <vertx.version>3.6.2</vertx.version>
     </properties>
 
     <dependencyManagement>
