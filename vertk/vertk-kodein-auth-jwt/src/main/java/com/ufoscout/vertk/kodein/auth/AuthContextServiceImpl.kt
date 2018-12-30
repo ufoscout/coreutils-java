@@ -1,24 +1,34 @@
 package com.ufoscout.vertk.kodein.auth
 
-import com.ufoscout.coreutils.auth.Auth
-import com.ufoscout.coreutils.auth.AuthContext
-import com.ufoscout.coreutils.auth.AuthService
+import com.ufoscout.coreutils.auth.*
+import com.ufoscout.coreutils.jwt.TokenExpiredException
 import com.ufoscout.coreutils.jwt.kotlin.JwtService
+import com.ufoscout.vertk.kodein.web.WebException
+import com.ufoscout.vertk.kodein.web.WebExceptionService
+import com.ufoscout.vertk.kodein.web.registerTransformer
+import io.netty.handler.codec.http.HttpResponseStatus
 import io.vertx.core.http.HttpServerRequest
 
 open class AuthContextServiceImpl(
+        val webExceptionService: WebExceptionService,
         val authService: AuthService,
         val jwtService: JwtService): AuthContextService {
 
-    override fun tokenFrom(httpServerRequest: HttpServerRequest): String? {
-        val header = httpServerRequest.getHeader(AuthContants.JWT_TOKEN_HEADER);
+    override fun tokenFrom(request: HttpServerRequest): String? {
+        val header = request.getHeader(AuthContants.JWT_TOKEN_HEADER);
         if (header!=null && header.startsWith(AuthContants.JWT_TOKEN_HEADER_SUFFIX)) {
             return header.substring(AuthContants.JWT_TOKEN_HEADER_SUFFIX.length)
         }
         return null
     }
 
-    override suspend fun start() {
+    init {
+
+        webExceptionService.registerTransformer<UnauthenticatedException> { ex -> WebException(cause = ex, code = HttpResponseStatus.UNAUTHORIZED.code(), message = "NotAuthenticated") }
+        webExceptionService.registerTransformer<BadCredentialsException> { ex -> WebException(cause = ex, code = HttpResponseStatus.UNAUTHORIZED.code(), message = "BadCredentials") }
+        webExceptionService.registerTransformer<UnauthorizedException> { ex -> WebException(cause = ex, code = HttpResponseStatus.FORBIDDEN.code(), message = "AccessDenied") }
+        webExceptionService.registerTransformer<TokenExpiredException> { ex -> WebException(cause = ex, code = HttpResponseStatus.UNAUTHORIZED.code(), message = "TokenExpired") }
+
         authService.start()
     }
 

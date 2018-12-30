@@ -9,7 +9,7 @@ import org.kodein.di.generic.singleton
 
 class AuthTestModule(): VertkKodeinModule {
 
-    override fun module() = Kodein.Module {
+    override fun module(vertx: Vertx) = Kodein.Module {
         bind<RolesProvider>() with singleton { InMemoryRolesProvider() }
     }
 

@@ -12,7 +12,7 @@ interface VertkKodeinModule {
      * Return a new [Kodein.Module] instance to be imported before
      * the [VertxkModule] is initialized.
      */
-    fun module(): Kodein.Module
+    fun module(vertx: Vertx): Kodein.Module
 
     /**
      * Initialization entry point for the the [VertxkModule].

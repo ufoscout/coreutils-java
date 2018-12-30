@@ -19,7 +19,7 @@ class AuthenticationController (val routerService: RouterService,
 
         val router = routerService.router()
 
-        router.awaitRestPost<LoginDto>(BASE_AUTH_API + "/login") { rc, loginDto ->
+        router.awaitRestPost<LoginDto>(BASE_AUTH_API + "/login") { _, loginDto ->
             val login = userService.login(loginDto.username, loginDto.password)
             val token = auth.generateToken(login)
             logger.info("Return token: [${token}]")

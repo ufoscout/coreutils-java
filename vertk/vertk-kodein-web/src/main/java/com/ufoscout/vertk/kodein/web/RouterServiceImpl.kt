@@ -1,5 +1,6 @@
 package com.ufoscout.vertk.kodein.web
 
+import com.ufoscout.coreutils.validation.ValidationException
 import com.ufoscout.vertk.awaitListen
 import com.ufoscout.vertk.web.endWithJson
 import io.vertx.core.Handler
@@ -13,10 +14,25 @@ import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 import java.util.*
 
-class RouterServiceImpl(val routerConfig: RouterConfig,
+class RouterServiceImpl private constructor(val routerConfig: RouterConfig,
                         val httpServerOptions: HttpServerOptions,
                         val vertx: Vertx,
                         val webExceptionService: WebExceptionService) : RouterService {
+
+    companion object {
+        fun new(routerConfig: RouterConfig,
+                httpServerOptions: HttpServerOptions,
+                vertx: Vertx,
+                webExceptionService: WebExceptionService): RouterService {
+
+            webExceptionService.registerTransformer<BadRequestException> { ex -> WebException(cause = ex, code = 400, message = ex.message!!) }
+            webExceptionService.registerTransformer<ValidationException> { ex -> WebException(cause = ex, code = 422, message = ex.message!!, details = ex.violations) }
+
+            val router = RouterServiceImpl(routerConfig, httpServerOptions, vertx, webExceptionService)
+            return router
+        }
+    }
+
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
@@ -32,7 +48,7 @@ class RouterServiceImpl(val routerConfig: RouterConfig,
         return router
     }
 
-    override suspend fun start() {
+    suspend override fun start() {
         val port = vertx.createHttpServer(httpServerOptions)
                 .requestHandler(Handler<HttpServerRequest> { mainRouter.accept(it) })
                 .awaitListen(routerConfig.port).actualPort()
