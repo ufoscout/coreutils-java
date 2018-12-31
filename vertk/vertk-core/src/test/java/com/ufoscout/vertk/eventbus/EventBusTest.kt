@@ -4,8 +4,9 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.ufoscout.vertk.BaseTest
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
+import io.vertx.kotlin.core.eventbus.sendAwait
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.*
 
@@ -23,7 +24,7 @@ class EventBusTest: BaseTest() {
             message.reply(response)
         }
 
-        val message = vertx.eventBus().awaitSend<String>(address, request)
+        val message = vertx.eventBus().sendAwait<String>(address, request)
         assertEquals(response, message.body())
 
     }
@@ -35,12 +36,12 @@ class EventBusTest: BaseTest() {
         val request = UUID.randomUUID().toString()
         val response = UUID.randomUUID().toString()
 
-        vertx.eventBus().awaitConsumer(address) { message: String ->
+        vertx.eventBus().consumerAwait(address) { message: String ->
             assertEquals(request, message)
             response
         }
 
-        val message = vertx.eventBus().awaitSend<String>(address, request)
+        val message = vertx.eventBus().sendAwait<String>(address, request)
         assertEquals(response, message.body())
 
     }
@@ -56,12 +57,12 @@ class EventBusTest: BaseTest() {
         val request = UUID.randomUUID().toString()
         val response = UUID.randomUUID().toString()
 
-        vertx.eventBus().awaitConsumer(address) { message: MyClass ->
+        vertx.eventBus().consumerAwait(address) { message: MyClass ->
             assertEquals(request, message.value)
             MyClass(value = response)
         }
 
-        val message = vertx.eventBus().awaitSend<MyClass>(address, MyClass(value = request))
+        val message = vertx.eventBus().sendAwait<MyClass>(address, MyClass(value = request))
         assertEquals(response, message.body().value)
 
     }

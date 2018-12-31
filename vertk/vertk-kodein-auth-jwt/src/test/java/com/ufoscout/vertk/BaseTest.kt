@@ -2,6 +2,7 @@ package com.ufoscout.vertk
 
 import io.vertx.core.Vertx
 import io.vertx.core.logging.LoggerFactory
+import io.vertx.kotlin.core.closeAwait
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -25,7 +26,7 @@ abstract class BaseTest {
 
     @AfterEach
     fun baseTearDown() = runBlocking<Unit> {
-        vertk.awaitClose()
+        vertk.closeAwait()
     }
 
     @BeforeEach

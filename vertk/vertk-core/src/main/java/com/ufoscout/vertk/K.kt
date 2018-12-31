@@ -3,29 +3,11 @@ package com.ufoscout.vertk
 import com.ufoscout.vertk.eventbus.Addr
 import com.ufoscout.vertk.eventbus.EventBusWithGroups
 import io.vertx.core.*
-import io.vertx.core.http.HttpServer
+import io.vertx.kotlin.core.executeBlockingAwait
 import io.vertx.kotlin.coroutines.awaitResult
 import io.vertx.kotlin.coroutines.dispatcher
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.util.*
-
-
-suspend fun HttpServer.awaitListen(port: Int): HttpServer {
-    awaitResult<io.vertx.core.http.HttpServer> { wait ->
-        this.listen(port, wait)
-    }
-    return this
-}
-
-suspend fun HttpServer.awaitListen(port: Int, host: String): HttpServer {
-    awaitResult<io.vertx.core.http.HttpServer> { wait ->
-        this.listen(port, host, wait)
-    }
-    return this
-}
 
 /**
  * Executes a suspendable function in the current Vertx context without blocking current thread.
@@ -49,36 +31,19 @@ fun <T> Vertx.runBlocking(action: suspend () -> T): T {
     }
 }
 
-suspend fun Vertx.awaitClose() {
-    awaitResult<Void> { this.close(it) }
-}
-
-suspend fun Vertx.awaitDeployVerticle(name: String, deploymentOptions: DeploymentOptions = DeploymentOptions()) {
-    awaitResult<String> {
-        this.deployVerticle(name, deploymentOptions, it)
+suspend fun <R> Vertx.awaitExecuteBlocking(action: () -> R): R {
+    val handler: Handler<Future<R>> = Handler {
+        try {
+            val result = action()
+            it.complete(result)
+        } catch (e: Throwable) {
+            it.fail(e)
+        }
     }
+    return this.executeBlockingAwait(handler)!!
 }
 
-suspend fun Vertx.awaitDeployVerticle(supplier: () -> Verticle, deploymentOptions: DeploymentOptions = DeploymentOptions()) {
-    awaitResult<String> {
-        this.deployVerticle(java.util.function.Supplier { supplier() }, deploymentOptions, it)
-    }
-}
-
-suspend fun Vertx.awaitDeployVerticle(verticle: Verticle, deploymentOptions: DeploymentOptions = DeploymentOptions()) {
-    awaitResult<String> {
-        this.deployVerticle(verticle, deploymentOptions, it)
-    }
-}
-
-inline suspend fun <reified T : Verticle> Vertx.awaitDeployVerticle(deploymentOptions: DeploymentOptions = DeploymentOptions()) {
-    awaitResult<String> {
-        this.deployVerticle(T::class.java, deploymentOptions, it)
-    }
-}
-
-suspend fun <R> Vertx.awaitExecuteBlocking(action: () -> R, ordered: Boolean = true): R {
-    return awaitResult<R> {
+suspend fun <R> Vertx.awaitExecuteBlocking(action: () -> R, ordered: Boolean): R {
         val handler: Handler<Future<R>> = Handler {
             try {
                 val result = action()
@@ -87,7 +52,19 @@ suspend fun <R> Vertx.awaitExecuteBlocking(action: () -> R, ordered: Boolean = t
                 it.fail(e)
             }
         }
-        this.executeBlocking(handler, ordered, it)
+        return this.executeBlockingAwait(handler, ordered)!!
+}
+
+suspend fun Vertx.deployVerticleAwait(supplier: () -> Verticle, deploymentOptions: DeploymentOptions = DeploymentOptions()) {
+    awaitResult<String> {
+        this.deployVerticle(java.util.function.Supplier { supplier() }, deploymentOptions, it)
+    }
+}
+
+
+inline suspend fun <reified T : Verticle> Vertx.deployVerticleAwait(deploymentOptions: DeploymentOptions = DeploymentOptions()) {
+    awaitResult<String> {
+        this.deployVerticle(T::class.java, deploymentOptions, it)
     }
 }
 

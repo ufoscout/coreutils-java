@@ -1,7 +1,7 @@
 package com.ufoscout.vertk.kodein.stub
 
 import com.ufoscout.vertk.kodein.VertkKodeinModule
-import com.ufoscout.vertk.kodein.awaitDeployKodeinVerticle
+import com.ufoscout.vertk.kodein.deployKodeinVerticleAwait
 import io.vertx.core.DeploymentOptions
 import io.vertx.core.Vertx
 import org.kodein.di.Kodein
@@ -25,7 +25,7 @@ class StubModule(val deploymentOptions: DeploymentOptions = DeploymentOptions())
     }
 
     override suspend fun onInit(vertx: Vertx, kodein: Kodein) {
-        vertx.awaitDeployKodeinVerticle<VertxKVerticleImpl>(deploymentOptions)
+        vertx.deployKodeinVerticleAwait<VertxKVerticleImpl>(deploymentOptions)
     }
 
 }

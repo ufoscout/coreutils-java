@@ -9,12 +9,12 @@ import com.ufoscout.vertk.kodein.web.ErrorDetails
 import com.ufoscout.vertk.kodein.web.AuthenticationController
 import com.ufoscout.vertk.kodein.web.LoginDto
 import com.ufoscout.vertk.kodein.web.LoginResponseDto
-import com.ufoscout.vertk.web.client.awaitSend
-import com.ufoscout.vertk.web.client.awaitSendJson
 import com.ufoscout.vertk.web.client.bodyAsJson
 import com.ufoscout.vertk.web.client.putHeaders
 import io.netty.handler.codec.http.HttpResponseStatus
 import io.vertx.ext.web.client.WebClient
+import io.vertx.kotlin.ext.web.client.sendAwait
+import io.vertx.kotlin.ext.web.client.sendJsonAwait
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -32,7 +32,7 @@ class AuthenticationControllerIT : BaseIT() {
     fun shouldCallLogin() = runBlocking<Unit> {
 
         val loginDto = LoginDto("user", "user")
-        val response = client.post(port(), "localhost", AuthenticationController.BASE_AUTH_API + "/login").awaitSendJson(loginDto)
+        val response = client.post(port(), "localhost", AuthenticationController.BASE_AUTH_API + "/login").sendJsonAwait(loginDto)
 
         val body = response.bodyAsJson<LoginResponseDto>()
 
@@ -44,7 +44,7 @@ class AuthenticationControllerIT : BaseIT() {
     @Test
     fun shouldGetUnauthorizedWithAnonymousAuth() = runBlocking<Unit> {
         val response = client.get(port(), "localhost",
-                AuthenticationController.BASE_AUTH_API + "/test/authenticated").awaitSend()
+                AuthenticationController.BASE_AUTH_API + "/test/authenticated").sendAwait()
 
         assertEquals(HttpResponseStatus.UNAUTHORIZED.code(), response.statusCode())
 
@@ -56,7 +56,7 @@ class AuthenticationControllerIT : BaseIT() {
 
     fun shouldGetUnauthorizedWithAnonymousAuthOnProtectedUri() = runBlocking<Unit> {
         val response = client.get(port(), "localhost",
-                AuthenticationController.BASE_AUTH_API + "/test/protected").awaitSend()
+                AuthenticationController.BASE_AUTH_API + "/test/protected").sendAwait()
 
         assertEquals(HttpResponseStatus.UNAUTHORIZED.code(), response.statusCode())
 
@@ -76,7 +76,7 @@ class AuthenticationControllerIT : BaseIT() {
         val response = client.get(port(), "localhost",
                 AuthenticationController.BASE_AUTH_API + "/test/authenticated")
                 .putHeaders(headers)
-                .awaitSend()
+                .sendAwait()
 
         assertEquals(HttpResponseStatus.OK.code(), response.statusCode())
 
@@ -89,7 +89,7 @@ class AuthenticationControllerIT : BaseIT() {
     fun shouldAccessPublicUriWithAnonymousAuth() = runBlocking<Unit> {
 
         val response = client.get(port(), "localhost",
-                AuthenticationController.BASE_AUTH_API + "/test/public").awaitSend()
+                AuthenticationController.BASE_AUTH_API + "/test/public").sendAwait()
 
         val userContext = response.bodyAsJson<Auth>()
         assertNotNull(userContext)
@@ -107,7 +107,7 @@ class AuthenticationControllerIT : BaseIT() {
                 port(),
                 "localhost",
                 AuthenticationController.BASE_AUTH_API + "/login").
-                awaitSendJson(loginDto)
+                sendJsonAwait(loginDto)
 
 
         val responseDto = response.bodyAsJson<LoginResponseDto>()
@@ -129,7 +129,7 @@ class AuthenticationControllerIT : BaseIT() {
                 port(),
                 "localhost",
                 AuthenticationController.BASE_AUTH_API + "/login").
-                awaitSendJson(loginDto)
+                sendJsonAwait(loginDto)
 
         assertEquals(HttpResponseStatus.UNAUTHORIZED.code(), response.statusCode())
 
@@ -150,7 +150,7 @@ class AuthenticationControllerIT : BaseIT() {
         val response = client.get(port(), "localhost",
                 AuthenticationController.BASE_AUTH_API + "/test/protected").
                 putHeaders(headers).
-                awaitSend()
+                sendAwait()
 
         assertEquals(HttpResponseStatus.FORBIDDEN.code(), response.statusCode())
 
@@ -171,7 +171,7 @@ class AuthenticationControllerIT : BaseIT() {
         val response = client.get(port(), "localhost",
                 AuthenticationController.BASE_AUTH_API + "/test/protected").
                 putHeaders(headers)
-                .awaitSend()
+                .sendAwait()
 
         val receivedAuthContext = response.bodyAsJson<Auth>()
         assertNotNull(receivedAuthContext)
@@ -190,7 +190,7 @@ class AuthenticationControllerIT : BaseIT() {
         val response = client.get(port(), "localhost",
                 AuthenticationController.BASE_AUTH_API + "/test/protected").
                 putHeaders(headers)
-                .awaitSend()
+                .sendAwait()
 
         assertEquals(HttpResponseStatus.UNAUTHORIZED.code(), response.statusCode())
 

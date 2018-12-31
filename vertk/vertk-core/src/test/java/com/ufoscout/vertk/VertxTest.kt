@@ -1,5 +1,6 @@
 package com.ufoscout.vertk
 
+import io.vertx.kotlin.core.executeBlockingAwait
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

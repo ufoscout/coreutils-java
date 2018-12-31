@@ -1,9 +1,9 @@
 package com.ufoscout.vertk.kodein
 
-import com.ufoscout.vertk.awaitDeployVerticle
 import io.vertx.core.DeploymentOptions
 import io.vertx.core.Verticle
 import io.vertx.core.Vertx
+import io.vertx.kotlin.core.deployVerticleAwait
 import org.kodein.di.Kodein
 
 interface VertkKodeinModule {
@@ -28,6 +28,6 @@ interface VertkKodeinModule {
  *
  * @param options  the deployment options.
  */
-inline suspend fun <reified T : Verticle> Vertx.awaitDeployKodeinVerticle(deploymentOptions: DeploymentOptions = DeploymentOptions()) {
-    this.awaitDeployVerticle(VertkKodeinVerticleFactory.PREFIX + ":" + T::class.java.canonicalName, deploymentOptions)
+inline suspend fun <reified T : Verticle> Vertx.deployKodeinVerticleAwait(deploymentOptions: DeploymentOptions = DeploymentOptions()) {
+    this.deployVerticleAwait(VertkKodeinVerticleFactory.PREFIX + ":" + T::class.java.canonicalName, deploymentOptions)
 }

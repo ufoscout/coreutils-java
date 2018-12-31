@@ -1,10 +1,12 @@
 package com.ufoscout.vertk.web
 
-import com.ufoscout.vertk.*
-import com.ufoscout.vertk.web.client.*
+import com.ufoscout.vertk.deployVerticleAwait
+import com.ufoscout.vertk.web.client.bodyAsJson
 import com.ufoscout.vertk.web.verticle.HttpVerticle
 import com.ufoscout.vertk.web.verticle.RequestDTO
 import com.ufoscout.vertk.web.verticle.ResponseDTO
+import io.vertx.kotlin.ext.web.client.sendAwait
+import io.vertx.kotlin.ext.web.client.sendJsonAwait
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -17,14 +19,14 @@ class HttpTest: BaseTest() {
     companion object {
         @BeforeAll @JvmStatic
         fun deployStubVerticle() = runBlocking<Unit> {
-            vertk.awaitDeployVerticle<HttpVerticle>()
+            vertk.deployVerticleAwait<HttpVerticle>()
         }
     }
 
     @Test
     fun shouldCallDelete() = runBlocking<Unit> {
         val response = client.delete(port, "localhost", HttpVerticle.path)
-                .awaitSend()
+                .sendAwait()
         val body = response.bodyAsJson(ResponseDTO::class.java)
         assertNotNull(response)
         assertNotNull(body)
@@ -35,7 +37,7 @@ class HttpTest: BaseTest() {
     @Test
     fun shouldCallGet() = runBlocking<Unit> {
         val response = client.get(port, "localhost", HttpVerticle.path)
-                .awaitSend()
+                .sendAwait()
         val body = response.bodyAsJson<ResponseDTO>()
 
         assertNotNull(response)
@@ -49,7 +51,7 @@ class HttpTest: BaseTest() {
         val request = RequestDTO(UUID.randomUUID().toString())
 
         val response = client.patch(port, "localhost", HttpVerticle.path)
-                .awaitSendJson(request)
+                .sendJsonAwait(request)
 
         val body = response.bodyAsJson(ResponseDTO::class.java)
 
@@ -64,7 +66,7 @@ class HttpTest: BaseTest() {
         val request = RequestDTO(UUID.randomUUID().toString())
 
         val response = client.post(port, "localhost", HttpVerticle.path)
-                .awaitSendJson(request)
+                .sendJsonAwait(request)
 
         val body = response.bodyAsJson(ResponseDTO::class.java)
 
@@ -78,7 +80,7 @@ class HttpTest: BaseTest() {
     fun shouldCallPut() = runBlocking<Unit> {
         val request = RequestDTO(UUID.randomUUID().toString())
         val response = client.put(port, "localhost", HttpVerticle.path)
-                .awaitSendJson(request)
+                .sendJsonAwait(request)
 
         val body = response.bodyAsJson(ResponseDTO::class.java)
         assertNotNull(response)

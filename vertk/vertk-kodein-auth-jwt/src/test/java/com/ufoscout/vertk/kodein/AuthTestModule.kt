@@ -14,7 +14,7 @@ class AuthTestModule(): VertkKodeinModule {
     }
 
     override suspend fun onInit(vertx: Vertx, kodein: Kodein) {
-        vertx.awaitDeployKodeinVerticle<AuthenticationController>()
+        vertx.deployKodeinVerticleAwait<AuthenticationController>()
     }
 
 }

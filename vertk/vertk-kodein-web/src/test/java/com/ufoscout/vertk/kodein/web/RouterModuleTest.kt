@@ -3,11 +3,11 @@ package com.ufoscout.vertk.kodein.web
 import com.ufoscout.vertk.kodein.VertkKodein
 import com.ufoscout.vertk.kodein.json.JsonModule
 import com.ufoscout.vertk.BaseTest
-import com.ufoscout.vertk.web.client.awaitSend
-import com.ufoscout.vertk.web.client.awaitSendJson
 import com.ufoscout.vertk.web.client.bodyAsJson
 import io.vertx.core.http.HttpServerOptions
 import io.vertx.ext.web.client.WebClient
+import io.vertx.kotlin.ext.web.client.sendAwait
+import io.vertx.kotlin.ext.web.client.sendJsonAwait
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -46,7 +46,7 @@ class RouterModuleTest: BaseTest() {
         val message = UUID.randomUUID().toString()
 
         val response = client.get(port, "localhost", "/core/test/fatal/${message}").
-                awaitSend()
+                sendAwait()
 
         assertEquals(500, response.statusCode())
 
@@ -62,7 +62,7 @@ class RouterModuleTest: BaseTest() {
 
         val message = UUID.randomUUID().toString()
 
-        val response = client.get(port, "localhost", "/core/test/badRequestException/${message}").awaitSend()
+        val response = client.get(port, "localhost", "/core/test/badRequestException/${message}").sendAwait()
 
         assertEquals(400, response.statusCode())
 
@@ -78,7 +78,7 @@ class RouterModuleTest: BaseTest() {
         val message = UUID.randomUUID().toString()
         val statusCode = 400 + Random().nextInt(50)
 
-        val response = client.get(port, "localhost", "/core/test/webException/${statusCode}/${message}").awaitSend()
+        val response = client.get(port, "localhost", "/core/test/webException/${statusCode}/${message}").sendAwait()
 
         assertEquals(statusCode, response.statusCode())
         val errorDetails = response.bodyAsJson<ErrorDetails>()
@@ -92,7 +92,7 @@ class RouterModuleTest: BaseTest() {
     @Test
     fun shouldMapWebExceptionFromCustomException() = runBlocking<Unit> {
 
-        val response = client.get(port, "localhost", "/core/test/customException").awaitSend()
+        val response = client.get(port, "localhost", "/core/test/customException").sendAwait()
         assertEquals(12345, response.statusCode())
 
         val errorDetails = response.bodyAsJson<ErrorDetails>()
@@ -107,7 +107,7 @@ class RouterModuleTest: BaseTest() {
 
         val bean = BeanToValidate(null, null)
 
-        val response = client.post(port, "localhost", "/core/test/validationException").awaitSendJson(bean)
+        val response = client.post(port, "localhost", "/core/test/validationException").sendJsonAwait(bean)
         assertEquals(422, response.statusCode())
 
         val errorDetails = response.bodyAsJson<ErrorDetails>()
