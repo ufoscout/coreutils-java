@@ -13,10 +13,10 @@ import io.vertx.ext.web.RoutingContext
 import io.vertx.kotlin.core.http.listenAwait
 import java.util.*
 
-class RouterServiceImpl private constructor(val routerConfig: RouterConfig,
-                        val httpServerOptions: HttpServerOptions,
-                        val vertx: Vertx,
-                        val webExceptionService: WebExceptionService) : RouterService {
+class RouterServiceImpl private constructor(private val routerConfig: RouterConfig,
+                                            private val httpServerOptions: HttpServerOptions,
+                                            private val vertx: Vertx,
+                                            private val webExceptionService: WebExceptionService) : RouterService {
 
     companion object {
         fun new(routerConfig: RouterConfig,
@@ -47,9 +47,9 @@ class RouterServiceImpl private constructor(val routerConfig: RouterConfig,
         return router
     }
 
-    suspend override fun start() {
+    override suspend fun start() {
         val port = vertx.createHttpServer(httpServerOptions)
-                .requestHandler(Handler<HttpServerRequest> { mainRouter.accept(it) })
+                .requestHandler(mainRouter)
                 .listenAwait(routerConfig.port).actualPort()
         logger.info("Router created and listening on port ${port}")
     }

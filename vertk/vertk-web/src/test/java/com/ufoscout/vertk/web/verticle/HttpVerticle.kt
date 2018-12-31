@@ -15,28 +15,28 @@ class HttpVerticle: CoroutineVerticle() {
 
         val router = BaseTest.router
 
-        router.awaitRestDelete(path) {
+        router.deleteRestAwait(path) {
             ResponseDTO(it.request().method().toString())
         }
 
 
-        router.awaitRestGet(path) {
+        router.getRestAwait(path) {
             ResponseDTO(it.request().method().toString())
         }
 
-        router.awaitRestOptions(path) {
+        router.optionsRestAwait(path) {
             ResponseDTO(it.request().method().toString())
         }
 
-        router.awaitRestPatch<RequestDTO>(path) { rc, body ->
+        router.patchRestAwait<RequestDTO>(path) { rc, body ->
             ResponseDTO("${rc.request().method()}-${body.message}")
         }
 
-        router.awaitRestPost<RequestDTO>(path) { rc, body ->
+        router.postRestAwait<RequestDTO>(path) { rc, body ->
             ResponseDTO("${rc.request().method()}-${body.message}")
         }
 
-        router.awaitRestPut<RequestDTO>(path) { rc, body ->
+        router.putRestAwait<RequestDTO>(path) { rc, body ->
             ResponseDTO("${rc.request().method()}-${body.message}")
         }
     }

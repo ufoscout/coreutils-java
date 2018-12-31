@@ -1,6 +1,5 @@
 package com.ufoscout.vertk
 
-import io.vertx.kotlin.core.executeBlockingAwait
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -51,10 +50,10 @@ class VertxTest: BaseTest() {
 
         val executed = AtomicBoolean(false)
 
-        vertx.awaitExecuteBlocking({
+        vertx.executeBlockingAwait {
             executed.set(true)
             Thread.sleep(50)
-        })
+        }
 
         assertTrue(executed.get());
 
@@ -66,10 +65,10 @@ class VertxTest: BaseTest() {
         val uuid = UUID.randomUUID().toString()
         val executed = AtomicBoolean(false)
 
-        val result = vertx.awaitExecuteBlocking({
+        val result = vertx.executeBlockingAwait {
             executed.set(true)
             uuid
-        })
+        }
 
         assertTrue(executed.get());
         assertEquals(uuid, result);
@@ -83,10 +82,10 @@ class VertxTest: BaseTest() {
         val executed = AtomicBoolean(false)
 
         try {
-            vertx.awaitExecuteBlocking({
+            vertx.executeBlockingAwait {
                 executed.set(true)
                 throw RuntimeException(uuid)
-            })
+            }
             fail("Should throw exception before arriving here!")
         } catch (e: RuntimeException) {
             assertEquals(uuid, e.message)

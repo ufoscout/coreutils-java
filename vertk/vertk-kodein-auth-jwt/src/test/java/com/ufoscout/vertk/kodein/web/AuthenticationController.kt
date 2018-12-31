@@ -19,24 +19,24 @@ class AuthenticationController (val routerService: RouterService,
 
         val router = routerService.router()
 
-        router.awaitRestPost<LoginDto>(BASE_AUTH_API + "/login") { _, loginDto ->
+        router.postRestAwait<LoginDto>(BASE_AUTH_API + "/login") { _, loginDto ->
             val login = userService.login(loginDto.username, loginDto.password)
             val token = auth.generateToken(login)
             logger.info("Return token: [${token}]")
             LoginResponseDto(token)
         }
 
-        router.awaitRestGet(BASE_AUTH_API + "/test/public") {
+        router.getRestAwait(BASE_AUTH_API + "/test/public") {
             val authContext = auth.from(it.request())
             authContext.auth
         }
 
-        router.awaitRestGet(BASE_AUTH_API + "/test/authenticated") {
+        router.getRestAwait(BASE_AUTH_API + "/test/authenticated") {
             val authContext = auth.from(it).isAuthenticated()
             authContext.auth
         }
 
-        router.awaitRestGet(BASE_AUTH_API + "/test/protected") {
+        router.getRestAwait(BASE_AUTH_API + "/test/protected") {
             val authContext = auth.from(it).hasRole("ADMIN")
             authContext.auth
         }

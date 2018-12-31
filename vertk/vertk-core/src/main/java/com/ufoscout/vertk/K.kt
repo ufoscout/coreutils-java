@@ -31,7 +31,7 @@ fun <T> Vertx.runBlocking(action: suspend () -> T): T {
     }
 }
 
-suspend fun <R> Vertx.awaitExecuteBlocking(action: () -> R): R {
+suspend fun <R> Vertx.executeBlockingAwait(action: () -> R): R {
     val handler: Handler<Future<R>> = Handler {
         try {
             val result = action()
@@ -43,7 +43,7 @@ suspend fun <R> Vertx.awaitExecuteBlocking(action: () -> R): R {
     return this.executeBlockingAwait(handler)!!
 }
 
-suspend fun <R> Vertx.awaitExecuteBlocking(action: () -> R, ordered: Boolean): R {
+suspend fun <R> Vertx.executeBlockingAwait(action: () -> R, ordered: Boolean): R {
         val handler: Handler<Future<R>> = Handler {
             try {
                 val result = action()
@@ -53,6 +53,18 @@ suspend fun <R> Vertx.awaitExecuteBlocking(action: () -> R, ordered: Boolean): R
             }
         }
         return this.executeBlockingAwait(handler, ordered)!!
+}
+
+suspend fun Vertx.deployVerticleAwait(verticle: Verticle, deploymentOptions: DeploymentOptions) {
+    awaitResult<String> {
+        this.deployVerticle(verticle, it)
+    }
+}
+
+suspend fun Vertx.deployVerticleAwait(verticle: Verticle) {
+    awaitResult<String> {
+        this.deployVerticle(verticle, it)
+    }
 }
 
 suspend fun Vertx.deployVerticleAwait(supplier: () -> Verticle, deploymentOptions: DeploymentOptions = DeploymentOptions()) {

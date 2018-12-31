@@ -3,8 +3,8 @@ package com.ufoscout.vertk.shared
 import io.vertx.core.shareddata.AsyncMap
 import io.vertx.kotlin.core.shareddata.getAwait
 import io.vertx.kotlin.core.shareddata.putAwait
+import io.vertx.kotlin.core.shareddata.putIfAbsentAwait
 import io.vertx.kotlin.coroutines.awaitResult
-
 
 // SharedData extensions
 suspend fun <K, V> AsyncMap<K, V>.entriesAwait(): Map<K, V> {
@@ -17,7 +17,8 @@ suspend fun <K, V> AsyncMap<K, V>.getOrComputeAwait(key: K, ifNotPresent: suspen
     var value = this.getAwait(key)
     if (value == null) {
         value = ifNotPresent(key)
-        this.putAwait(key, value)
+        this.putIfAbsentAwait(key, value)
+        value = this.getAwait(key)
     }
     return value!!
 }
@@ -26,7 +27,8 @@ suspend fun <K, V> AsyncMap<K, V>.getOrComputeAwait(key: K, ttl: Long, ifNotPres
     var value = this.getAwait(key)
     if (value == null) {
         value = ifNotPresent(key)
-        this.putAwait(key, value, ttl)
+        this.putIfAbsentAwait(key, value, ttl)
+        value = this.getAwait(key)
     }
     return value!!
 }

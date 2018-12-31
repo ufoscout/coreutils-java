@@ -12,11 +12,11 @@ import io.vertx.kotlin.coroutines.dispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-inline fun HttpServerResponse.endWithJson(obj: Any) {
+fun HttpServerResponse.endWithJson(obj: Any) {
     this.putHeader("Content-Type", "application/json; charset=utf-8").end(Json.encode(obj))
 }
 
-inline fun Route.awaitHandler(noinline handler: suspend (rc: RoutingContext) -> Any) {
+fun Route.handlerAwait(handler: suspend (rc: RoutingContext) -> Any) {
     this.handler {
         GlobalScope.launch (Vertx.currentContext().dispatcher()) {
             try {
@@ -28,62 +28,62 @@ inline fun Route.awaitHandler(noinline handler: suspend (rc: RoutingContext) -> 
     }
 }
 
-fun Router.awaitRestDelete(path: String, handler: suspend (rc: RoutingContext) -> Any) {
-    rest(this.delete(path), handler)
+fun Router.deleteRestAwait(path: String, handler: suspend (rc: RoutingContext) -> Any) {
+    restAwait(this.delete(path), handler)
 }
 
-fun Router.awaitRestDeleteWithRegex(regex: String, handler: suspend (rc: RoutingContext) -> Any) {
-    rest(this.deleteWithRegex(regex), handler)
+fun Router.deleteWithRegexRestAwait(regex: String, handler: suspend (rc: RoutingContext) -> Any) {
+    restAwait(this.deleteWithRegex(regex), handler)
 }
 
-fun Router.awaitRestGet(path: String, handler: suspend (rc: RoutingContext) -> Any) {
-    rest(this.get(path), handler)
+fun Router.getRestAwait(path: String, handler: suspend (rc: RoutingContext) -> Any) {
+    restAwait(this.get(path), handler)
 }
 
-fun Router.awaitRestGetWithRegex(regex: String, handler: suspend (rc: RoutingContext) -> Any) {
-    rest(this.getWithRegex(regex), handler)
+fun Router.getWithRegexRestAwait(regex: String, handler: suspend (rc: RoutingContext) -> Any) {
+    restAwait(this.getWithRegex(regex), handler)
 }
 
-fun Router.awaitRestHeadWithRegex(regex: String, handler: suspend (rc: RoutingContext) -> Any) {
-    rest(this.headWithRegex(regex), handler)
+fun Router.headWithRegexRestAwait(regex: String, handler: suspend (rc: RoutingContext) -> Any) {
+    restAwait(this.headWithRegex(regex), handler)
 }
 
-fun Router.awaitRestOptions(path: String, handler: suspend (rc: RoutingContext) -> Any) {
-    rest(this.options(path), handler)
+fun Router.optionsRestAwait(path: String, handler: suspend (rc: RoutingContext) -> Any) {
+    restAwait(this.options(path), handler)
 }
 
-fun Router.awaitRestOptionsWithRegex(regex: String, handler: suspend (rc: RoutingContext) -> Any) {
-    rest(this.optionsWithRegex(regex), handler)
+fun Router.optionsWithRegexRestAwait(regex: String, handler: suspend (rc: RoutingContext) -> Any) {
+    restAwait(this.optionsWithRegex(regex), handler)
 }
 
-inline fun <reified I : Any> Router.awaitRestPatch(path: String, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
-    restWithBody<I>(this.patch(path), handler)
+inline fun <reified I : Any> Router.patchRestAwait(path: String, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
+    restWithBodyAwait<I>(this.patch(path), handler)
 }
 
-inline fun <reified I : Any> Router.awaitRestPatchWithRegex(regex: String, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
-    restWithBody<I>(this.patchWithRegex(regex), handler)
+inline fun <reified I : Any> Router.patchWithRegexRestAwait(regex: String, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
+    restWithBodyAwait<I>(this.patchWithRegex(regex), handler)
 }
 
-inline fun <reified I : Any> Router.awaitRestPost(path: String, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
-    restWithBody<I>(this.post(path), handler)
+inline fun <reified I : Any> Router.postRestAwait(path: String, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
+    restWithBodyAwait<I>(this.post(path), handler)
 }
 
-inline fun <reified I : Any> Router.awaitRestPostWithRegex(regex: String, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
-    restWithBody<I>(this.postWithRegex(regex), handler)
+inline fun <reified I : Any> Router.postWithRegexRestAwait(regex: String, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
+    restWithBodyAwait<I>(this.postWithRegex(regex), handler)
 }
 
-inline fun <reified I : Any> Router.awaitRestPut(path: String, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
-    restWithBody<I>(this.put(path), handler)
+inline fun <reified I : Any> Router.putRestAwait(path: String, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
+    restWithBodyAwait<I>(this.put(path), handler)
 }
 
-inline fun <reified I : Any> Router.awaitRestPutWithRegex(regex: String, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
-    restWithBody<I>(this.putWithRegex(regex), handler)
+inline fun <reified I : Any> Router.putWithRegexRestAwait(regex: String, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
+    restWithBodyAwait<I>(this.putWithRegex(regex), handler)
 }
 
-fun rest(route: Route, handler: suspend (rc: RoutingContext) -> Any) {
+fun restAwait(route: Route, handler: suspend (rc: RoutingContext) -> Any) {
     route
             .produces("application/json")
-            .awaitHandler({
+            .handlerAwait {
                         val result = handler(it)
                         var resultJson = if (result is String) {
                             result
@@ -91,14 +91,14 @@ fun rest(route: Route, handler: suspend (rc: RoutingContext) -> Any) {
                             Json.encode(result)
                         }
                         it.response().putHeader("Content-Type", "application/json; charset=utf-8").end(resultJson)
-            })
+            }
 }
 
-inline fun <reified I : Any> restWithBody(route: Route, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
+inline fun <reified I : Any> restWithBodyAwait(route: Route, noinline handler: suspend (rc: RoutingContext, body: I) -> Any) {
     route
             .consumes("application/json")
             .produces("application/json")
-            .awaitHandler({ rc ->
+            .handlerAwait { rc ->
                         val bodyBuffer = awaitEvent<Buffer> {
                             rc.request().bodyHandler(it)
                         }
@@ -110,8 +110,7 @@ inline fun <reified I : Any> restWithBody(route: Route, noinline handler: suspen
                             Json.encode(result)
                         }
                         rc.response().putHeader("Content-Type", "application/json; charset=utf-8").end(resultJson)
-
-            })
+            }
 }
 
 
