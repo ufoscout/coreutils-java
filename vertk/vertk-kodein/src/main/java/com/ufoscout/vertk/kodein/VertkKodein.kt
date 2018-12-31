@@ -30,7 +30,7 @@ object VertkKodein {
             bind<EventBus>() with singleton { vertx.eventBus() }
             bind<FileSystem>() with singleton { vertx.fileSystem() }
             bind<SharedData>() with singleton { vertx.sharedData() }
-            build(vertx, this, *modules)
+            build(this, *modules)
         }
 
         log.info("Vertxk kodein modules created successfully")
@@ -48,11 +48,11 @@ object VertkKodein {
         return kodein
     }
 
-    private fun build(vertx: Vertx, builder: Kodein.MainBuilder, vararg modules: VertkKodeinModule) {
+    private fun build(builder: Kodein.MainBuilder, vararg modules: VertkKodeinModule) {
         //vertx.runBlocking {
             for (module in modules) {
                 //Vertxk.log.debug("Import Kodein Module from ${module.javaClass.name}")
-                builder.import(module.module(vertx), allowOverride = true)
+                builder.import(module.module(), allowOverride = true)
             }
         //}
     }

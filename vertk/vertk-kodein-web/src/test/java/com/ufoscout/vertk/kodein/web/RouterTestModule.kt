@@ -7,7 +7,7 @@ import org.kodein.di.Kodein
 
 class RouterTestModule: VertkKodeinModule {
 
-    override fun module(vertx: Vertx) = Kodein.Module {}
+    override fun module() = Kodein.Module {}
 
     override suspend fun onInit(vertx: Vertx, kodein: Kodein) {
         vertx.awaitDeployKodeinVerticle<TestWebController>()

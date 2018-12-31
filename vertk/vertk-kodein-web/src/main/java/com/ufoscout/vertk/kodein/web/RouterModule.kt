@@ -11,7 +11,7 @@ import org.kodein.di.generic.instance
 
 class RouterModule(val routerConfig: RouterConfig, val httpServerOptions: HttpServerOptions): VertkKodeinModule {
 
-    override fun module(vertx: Vertx) = Kodein.Module {
+    override fun module() = Kodein.Module {
             bind<RouterConfig>() with eagerSingleton { routerConfig }
             bind<WebExceptionService>() with eagerSingleton { WebExceptionServiceImpl() }
             bind<RouterService>() with eagerSingleton { RouterServiceImpl.new(instance(), httpServerOptions, instance(), instance()) }

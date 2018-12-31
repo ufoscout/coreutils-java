@@ -9,7 +9,7 @@ import org.kodein.di.generic.instance
 
 class MailModule(private val mailConfig: MailConfig): VertkKodeinModule {
 
-    override fun module(vertx: Vertx) = Kodein.Module {
+    override fun module() = Kodein.Module {
         bind<MailClient>() with eagerSingleton { MailClientFactory.build(mailConfig, instance()) }
     }
 

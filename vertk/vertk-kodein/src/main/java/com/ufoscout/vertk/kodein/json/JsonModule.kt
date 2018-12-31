@@ -15,7 +15,7 @@ import org.kodein.di.generic.eagerSingleton
 
 class JsonModule: VertkKodeinModule {
 
-    override fun module(vertx: Vertx) = Kodein.Module {
+    override fun module() = Kodein.Module {
         initMapper(Json.mapper)
         initMapper(Json.prettyMapper)
 

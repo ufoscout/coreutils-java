@@ -17,7 +17,7 @@ class StubModule(val deploymentOptions: DeploymentOptions = DeploymentOptions())
         val RANDOM_NAME= UUID.randomUUID().toString()
     }
 
-    override fun module(vertx: Vertx): Kodein.Module {
+    override fun module(): Kodein.Module {
         return Kodein.Module{
             bind<String>() with singleton { RANDOM_NAME }
             bind<VertxKComponentImpl>() with eagerSingleton { VertxKComponentImpl(instance()) }

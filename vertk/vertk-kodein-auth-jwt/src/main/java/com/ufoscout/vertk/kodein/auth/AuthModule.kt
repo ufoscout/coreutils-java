@@ -15,7 +15,7 @@ import org.kodein.di.generic.instance
 
 class AuthModule(val jwtConfig: JwtConfig): VertkKodeinModule {
 
-    override fun module(vertx: Vertx) = Kodein.Module {
+    override fun module() = Kodein.Module {
         bind<AuthService>() with eagerSingleton {
             AuthServiceImpl(instance())
         }
