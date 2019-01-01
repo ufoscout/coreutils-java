@@ -5,6 +5,9 @@ import java.util.concurrent.atomic.AtomicInteger
 class VertxKComponentImpl {
 
     constructor(name : String) {
+
+        println("VertxKComponentImpl instantiated with name: [$name]")
+
         STARTED = true
         NAME = name
         COUNT.getAndIncrement()

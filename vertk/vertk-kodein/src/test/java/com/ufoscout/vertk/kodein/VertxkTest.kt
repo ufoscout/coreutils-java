@@ -24,6 +24,7 @@ class VertxkTest: BaseTest() {
     fun shouldDeploy() = runBlocking<Unit> {
 
         VertkKodein.start(vertx = vertk, modules = *arrayOf(StubModule()))
+
         assertTrue(VertxKComponentImpl.STARTED)
         assertEquals(StubModule.RANDOM_NAME, VertxKComponentImpl.NAME)
         assertEquals(1, VertxKComponentImpl.COUNT.get())

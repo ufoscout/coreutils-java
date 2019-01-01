@@ -8,8 +8,7 @@ import io.vertx.core.Vertx
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
-import org.kodein.di.DKodein
-import org.kodein.di.direct
+import org.koin.core.Koin
 import org.testcontainers.containers.GenericContainer
 
 abstract class BaseIT : BaseTest() {
@@ -17,7 +16,7 @@ abstract class BaseIT : BaseTest() {
     companion object {
 
         private var vertk: Vertx? = null
-        private var kodein: DKodein? = null
+        private var koin: Koin? = null
         private var mailConfig: MailConfig? = null
 
         @BeforeAll @JvmStatic
@@ -36,10 +35,10 @@ abstract class BaseIT : BaseTest() {
 
             vertk = Vertx.vertx()
 
-            kodein = VertkKodein.start(
+            koin = VertkKodein.start(
                     vertk!!,
                     MailModule(mailConfig!!)
-            ).direct
+            )
 
         }
 
@@ -52,7 +51,7 @@ abstract class BaseIT : BaseTest() {
 
     protected fun vertk(): Vertx = vertk!!
     protected fun mailConfig() = mailConfig!!
-    protected fun kodein(): DKodein = kodein!!
+    protected fun koin(): Koin = koin!!
 
 }
 

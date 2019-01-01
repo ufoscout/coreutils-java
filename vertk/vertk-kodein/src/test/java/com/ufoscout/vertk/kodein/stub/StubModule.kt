@@ -4,11 +4,7 @@ import com.ufoscout.vertk.kodein.VertkKodeinModule
 import com.ufoscout.vertk.kodein.deployKodeinVerticleAwait
 import io.vertx.core.DeploymentOptions
 import io.vertx.core.Vertx
-import org.kodein.di.Kodein
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.eagerSingleton
-import org.kodein.di.generic.instance
-import org.kodein.di.generic.singleton
+import org.koin.core.Koin
 import java.util.*
 
 class StubModule(val deploymentOptions: DeploymentOptions = DeploymentOptions()): VertkKodeinModule {
@@ -17,14 +13,13 @@ class StubModule(val deploymentOptions: DeploymentOptions = DeploymentOptions())
         val RANDOM_NAME= UUID.randomUUID().toString()
     }
 
-    override fun module(): Kodein.Module {
-        return Kodein.Module{
-            bind<String>() with singleton { RANDOM_NAME }
-            bind<VertxKComponentImpl>() with eagerSingleton { VertxKComponentImpl(instance()) }
-        }
+    override fun module() = org.koin.dsl.module {
+        single { RANDOM_NAME }
+        single(createdAtStart = true) { VertxKComponentImpl(get()) }
+        factory { VertxKVerticleImpl(get(), get()) }
     }
 
-    override suspend fun onInit(vertx: Vertx, kodein: Kodein) {
+    override suspend fun onInit(vertx: Vertx, koin: Koin) {
         vertx.deployKodeinVerticleAwait<VertxKVerticleImpl>(deploymentOptions)
     }
 

@@ -3,17 +3,16 @@ package com.ufoscout.vertk.kodein
 import com.ufoscout.coreutils.auth.RolesProvider
 import com.ufoscout.vertk.kodein.web.AuthenticationController
 import io.vertx.core.Vertx
-import org.kodein.di.Kodein
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.singleton
+import org.koin.core.Koin
 
-class AuthTestModule(): VertkKodeinModule {
+class AuthTestModule: VertkKodeinModule {
 
-    override fun module() = Kodein.Module {
-        bind<RolesProvider>() with singleton { InMemoryRolesProvider() }
+    override fun module() = org.koin.dsl.module{
+        single<RolesProvider> { InMemoryRolesProvider() }
+        factory { AuthenticationController(get(), get()) }
     }
 
-    override suspend fun onInit(vertx: Vertx, kodein: Kodein) {
+    override suspend fun onInit(vertx: Vertx, koin: Koin) {
         vertx.deployKodeinVerticleAwait<AuthenticationController>()
     }
 

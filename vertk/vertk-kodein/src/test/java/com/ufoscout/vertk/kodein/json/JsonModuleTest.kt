@@ -1,15 +1,13 @@
 package com.ufoscout.vertk.kodein.json
 
 import com.ufoscout.coreutils.json.kotlin.JsonSerializerService
-import com.ufoscout.vertk.kodein.VertkKodein
 import com.ufoscout.vertk.BaseTest
+import com.ufoscout.vertk.kodein.VertkKodein
 import io.vertx.core.Vertx
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.kodein.di.direct
-import org.kodein.di.generic.instance
 import java.io.ByteArrayOutputStream
 import java.nio.charset.StandardCharsets
 import java.security.SecureRandom
@@ -28,8 +26,8 @@ class JsonModuleTest : BaseTest() {
 
             vertk = Vertx.vertx()
 
-            val kodein = VertkKodein.start(vertk!!, JsonModule())
-            jsonSerializerService = kodein.direct.instance<JsonSerializerService>()
+            val koin = VertkKodein.start(vertk!!, JsonModule())
+            jsonSerializerService = koin.get<JsonSerializerService>()
 
             println("CREATED")
             println("CREATED")

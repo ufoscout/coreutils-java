@@ -8,26 +8,23 @@ import com.ufoscout.coreutils.jwt.kotlin.CoreJsonProvider
 import com.ufoscout.coreutils.jwt.kotlin.JwtService
 import com.ufoscout.vertk.kodein.VertkKodeinModule
 import io.vertx.core.Vertx
-import org.kodein.di.Kodein
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.eagerSingleton
-import org.kodein.di.generic.instance
+import org.koin.core.Koin
 
 class AuthModule(val jwtConfig: JwtConfig): VertkKodeinModule {
 
-    override fun module() = Kodein.Module {
-        bind<AuthService>() with eagerSingleton {
-            AuthServiceImpl(instance())
+    override fun module() = org.koin.dsl.module {
+        single<AuthService> {
+            AuthServiceImpl(get())
         }
-        bind<AuthContextService>() with eagerSingleton {
-            AuthContextServiceImpl(instance(), instance(), instance())
+        single<AuthContextService> {
+            AuthContextServiceImpl(get(), get(), get())
         }
-        bind<JwtService>() with eagerSingleton {
-            JwtService(JwtServiceJJWT(jwtConfig, CoreJsonProvider(instance())))
+        single<JwtService> {
+            JwtService(JwtServiceJJWT(jwtConfig, CoreJsonProvider(get())))
         }
     }
 
-    override suspend fun onInit(vertx: Vertx, kodein: Kodein) {
+    override suspend fun onInit(vertx: Vertx, koin: Koin) {
     }
 
 }

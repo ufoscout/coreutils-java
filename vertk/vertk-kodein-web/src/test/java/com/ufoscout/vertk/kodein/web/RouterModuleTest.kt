@@ -12,8 +12,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.kodein.di.direct
-import org.kodein.di.generic.instance
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -31,13 +29,13 @@ class RouterModuleTest: BaseTest() {
 
     @BeforeEach
     fun setup() = runBlocking {
-        val kodein = VertkKodein.start(vertk,
+        val koin = VertkKodein.start(vertk,
                 JsonModule(),
                 RouterModule(RouterConfig(port), HttpServerOptions()),
                 RouterTestModule()
         )
-        assertNotNull(kodein.direct.instance<RouterService>())
-        assertNotNull(kodein.direct.instance<WebExceptionService>())
+        assertNotNull(koin.get<RouterService>())
+        assertNotNull(koin.get<WebExceptionService>())
     }
 
     @Test

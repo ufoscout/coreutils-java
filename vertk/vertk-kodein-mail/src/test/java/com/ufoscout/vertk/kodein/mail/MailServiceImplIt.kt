@@ -5,11 +5,10 @@ import io.vertx.ext.mail.MailMessage
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.kodein.di.generic.instance
 
 internal class MailServiceImplIt: BaseIT() {
 
-    private val mailClient = kodein().instance<MailClient>()
+    private val mailClient = koin().get<MailClient>()
 
     @Test
     fun mailServiceShouldExist() {

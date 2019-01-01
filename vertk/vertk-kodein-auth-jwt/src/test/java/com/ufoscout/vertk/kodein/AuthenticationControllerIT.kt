@@ -5,8 +5,8 @@ import com.ufoscout.coreutils.auth.AuthService
 import com.ufoscout.coreutils.jwt.kotlin.JwtService
 import com.ufoscout.vertk.BaseIT
 import com.ufoscout.vertk.kodein.auth.AuthContants
-import com.ufoscout.vertk.kodein.web.ErrorDetails
 import com.ufoscout.vertk.kodein.web.AuthenticationController
+import com.ufoscout.vertk.kodein.web.ErrorDetails
 import com.ufoscout.vertk.kodein.web.LoginDto
 import com.ufoscout.vertk.kodein.web.LoginResponseDto
 import com.ufoscout.vertk.web.client.bodyAsJson
@@ -18,15 +18,14 @@ import io.vertx.kotlin.ext.web.client.sendJsonAwait
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.kodein.di.generic.instance
 import java.util.*
 
 
 class AuthenticationControllerIT : BaseIT() {
 
     val client = WebClient.create(vertk)
-    val jwt: JwtService = kodein().instance()
-    val authService: AuthService = kodein().instance()
+    val jwt: JwtService = koin().get()
+    val authService: AuthService = koin().get()
 
     @Test
     fun shouldCallLogin() = runBlocking<Unit> {

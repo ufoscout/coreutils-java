@@ -13,8 +13,7 @@ import io.vertx.kotlin.core.closeAwait
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
-import org.kodein.di.DKodein
-import org.kodein.di.direct
+import org.koin.core.Koin
 import java.io.IOException
 import java.net.ServerSocket
 
@@ -24,7 +23,7 @@ abstract class BaseIT : BaseTest() {
 
         private var vertk: Vertx? = null
         private val port: Int = getFreePort()
-        private var kodein: DKodein? = null
+        private var koin: Koin? = null
 
         @BeforeAll @JvmStatic
         fun setUpClass() = runBlocking<Unit> {
@@ -32,14 +31,14 @@ abstract class BaseIT : BaseTest() {
             System.setProperty("server.port", port.toString())
             vertk = Vertx.vertx()
 
-            kodein = VertkKodein.start(
+            koin = VertkKodein.start(
                     vertk!!,
                     AuthModule(JwtConfig("secretslfhsadkfhadkfhakjfhawkfhawjfhawkfhaksfhakhwith9t249tyq43tq3tph53qcq98wrhpc924cthrw9ptcqh29ch5q29pthcq249ptheighcqn29cthor"
                             , "HS512", 60)),
                     JsonModule(),
                     AuthTestModule(),
                     RouterModule(RouterConfig(port), HttpServerOptions())
-            ).direct
+            )
 
         }
 
@@ -66,6 +65,6 @@ abstract class BaseIT : BaseTest() {
 
     protected fun vertk() = vertk!!
 
-    protected fun kodein(): DKodein = kodein!!
+    protected fun koin(): Koin = koin!!
 
 }

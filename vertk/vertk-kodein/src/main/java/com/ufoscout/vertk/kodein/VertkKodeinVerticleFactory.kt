@@ -2,13 +2,12 @@ package com.ufoscout.vertk.kodein
 
 import io.vertx.core.Verticle
 import io.vertx.core.spi.VerticleFactory
-import org.kodein.di.Kodein
-import org.kodein.di.jxinject.jx
+import org.koin.core.Koin
 
-class VertkKodeinVerticleFactory(val kodein: Kodein) : VerticleFactory {
+class VertkKodeinVerticleFactory(val koin: Koin) : VerticleFactory {
 
     companion object {
-        val PREFIX = "vertk-kodein"
+        val PREFIX = "vertk-koin"
     }
 
     override fun prefix(): String {
@@ -17,22 +16,8 @@ class VertkKodeinVerticleFactory(val kodein: Kodein) : VerticleFactory {
 
     override fun createVerticle(verticleName: String, classLoader: ClassLoader): Verticle {
         val className = VerticleFactory.removePrefix(verticleName)
-
-        /*
-        Class clazz;
-        if (verticleName.endsWith(".java")) {
-            CompilingClassLoader compilingLoader = new CompilingClassLoader(classLoader, verticleName);
-            String className = compilingLoader.resolveMainClassName();
-            clazz = compilingLoader.loadClass(className);
-        } else {
-            clazz = classLoader.loadClass(verticleName);
-        }
-        */
-
         val clazz = classLoader.loadClass(className)
-
-        return kodein.jx.newInstance(clazz) as Verticle
-
+        return koin.get<Verticle>(clazz = clazz.kotlin, name = null, parameters = null, scope = null)
     }
 
 }

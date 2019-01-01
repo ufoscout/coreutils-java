@@ -9,22 +9,19 @@ import com.ufoscout.coreutils.json.kotlin.JsonSerializerService
 import com.ufoscout.vertk.kodein.VertkKodeinModule
 import io.vertx.core.Vertx
 import io.vertx.core.json.Json
-import org.kodein.di.Kodein
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.eagerSingleton
+import org.koin.core.Koin
 
 class JsonModule: VertkKodeinModule {
 
-    override fun module() = Kodein.Module {
+    override fun module() = org.koin.dsl.module {
         initMapper(Json.mapper)
         initMapper(Json.prettyMapper)
 
-        bind<JsonSerializerService>() with eagerSingleton {
-            JsonSerializerService(JacksonJsonSerializerService(Json.mapper))
-        }
+        single { JsonSerializerService(JacksonJsonSerializerService(Json.mapper)) }
+
     }
 
-    override suspend fun onInit(vertx: Vertx, kodein: Kodein) {}
+    override suspend fun onInit(vertx: Vertx, koin: Koin) {}
 
     private fun initMapper(mapper: ObjectMapper) {
         mapper.registerModule(KotlinModule())

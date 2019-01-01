@@ -1,60 +1,59 @@
 package com.ufoscout.vertk.kodein
 
-import com.ufoscout.vertk.runBlocking
 import io.vertx.core.Vertx
-import io.vertx.core.eventbus.EventBus
-import io.vertx.core.file.FileSystem
 import io.vertx.core.logging.LoggerFactory
-import io.vertx.core.shareddata.SharedData
-import org.kodein.di.Kodein
-import org.kodein.di.direct
-import org.kodein.di.generic.allInstances
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.singleton
-import org.kodein.di.jxinject.jxInjectorModule
+import org.koin.Logger.SLF4JLogger
+import org.koin.core.Koin
+import org.koin.core.context.loadKoinModules
+import org.koin.dsl.koinApplication
+import org.koin.dsl.module
 
 object VertkKodein {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
     suspend fun start(vertx: Vertx,
-                      vararg modules: VertkKodeinModule): Kodein {
+                      vararg modules: VertkKodeinModule): Koin {
 
         log.info("Vertxk initialization start...")
 
         log.info("Vertxk kodein modules creations...")
 
-        val kodein = Kodein {
-            import(jxInjectorModule)
-            bind<Vertx>() with singleton { vertx }
-            bind<EventBus>() with singleton { vertx.eventBus() }
-            bind<FileSystem>() with singleton { vertx.fileSystem() }
-            bind<SharedData>() with singleton { vertx.sharedData() }
-            build(this, *modules)
+        val coreModule = module {
+            single { vertx }
+            single { vertx.eventBus() }
+            single { vertx.fileSystem() }
+            single { vertx.sharedData() }
         }
+
+        val koinModules = mutableListOf(coreModule)
+        for (module in modules) {
+            koinModules.add(module.module())
+        }
+
+        val koin = koinApplication {
+            // enable INFO logger
+            //useLogger()
+            // load Koin modules
+            //loadKoinModules(*koinModules)
+        }.logger(logger = SLF4JLogger())
+                .modules(koinModules)
+                .koin
 
         log.info("Vertxk kodein modules created successfully")
 
-        vertx.registerVerticleFactory(VertkKodeinVerticleFactory(kodein))
+        vertx.registerVerticleFactory(VertkKodeinVerticleFactory(koin))
 
         log.info("Initialize VertkKodeinModule...")
         for (module in modules) {
             log.info("Initialize VertkKodeinModule [${module.javaClass.name}]")
-            module.onInit(vertx, kodein)
+            module.onInit(vertx, koin)
         }
 
         log.info("Vertxk VertkKodeinModules initialization completed successfully")
 
-        return kodein
+        return koin
     }
 
-    private fun build(builder: Kodein.MainBuilder, vararg modules: VertkKodeinModule) {
-        //vertx.runBlocking {
-            for (module in modules) {
-                //Vertxk.log.debug("Import Kodein Module from ${module.javaClass.name}")
-                builder.import(module.module(), allowOverride = true)
-            }
-        //}
-    }
 
 }

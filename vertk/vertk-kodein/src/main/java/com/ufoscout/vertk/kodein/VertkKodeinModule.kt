@@ -4,21 +4,22 @@ import io.vertx.core.DeploymentOptions
 import io.vertx.core.Verticle
 import io.vertx.core.Vertx
 import io.vertx.kotlin.core.deployVerticleAwait
-import org.kodein.di.Kodein
+import org.koin.core.Koin
+import org.koin.core.module.Module
 
 interface VertkKodeinModule {
 
     /**
-     * Return a new [Kodein.Module] instance to be imported before
+     * Return a new [Module] instance to be imported before
      * the [VertxkModule] is initialized.
      */
-    fun module(): Kodein.Module
+    fun module(): Module
 
     /**
      * Initialization entry point for the the [VertxkModule].
      * All [Verticle]s that belong to the module should be deployed here.
      */
-    suspend fun onInit(vertx: Vertx, kodein: Kodein)
+    suspend fun onInit(vertx: Vertx, koin: Koin)
 
 }
 
