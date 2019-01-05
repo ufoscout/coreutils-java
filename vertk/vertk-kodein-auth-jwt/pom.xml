@@ -17,7 +17,7 @@
     </dependency>
     <dependency>
       <groupId>com.ufoscout.coreutils</groupId>
-      <artifactId>auth</artifactId>
+      <artifactId>auth-kotlin</artifactId>
     </dependency>
     <dependency>
       <groupId>com.ufoscout.coreutils</groupId>

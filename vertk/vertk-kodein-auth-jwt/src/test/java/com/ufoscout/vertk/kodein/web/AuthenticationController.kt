@@ -1,7 +1,8 @@
 package com.ufoscout.vertk.kodein.web
 
 import com.ufoscout.vertk.kodein.auth.AuthContextService
-import com.ufoscout.vertk.web.*
+import com.ufoscout.vertk.web.getRestAwait
+import com.ufoscout.vertk.web.postRestAwait
 import io.vertx.core.logging.LoggerFactory
 import io.vertx.kotlin.coroutines.CoroutineVerticle
 
@@ -32,12 +33,12 @@ class AuthenticationController (val routerService: RouterService,
         }
 
         router.getRestAwait(BASE_AUTH_API + "/test/authenticated") {
-            val authContext = auth.from(it).isAuthenticated()
+            val authContext = auth.from(it).isAuthenticated
             authContext.auth
         }
 
         router.getRestAwait(BASE_AUTH_API + "/test/protected") {
-            val authContext = auth.from(it).hasRole("ADMIN")
+            val authContext = auth.from(it).isAuthenticated.hasRole("ADMIN")
             authContext.auth
         }
 

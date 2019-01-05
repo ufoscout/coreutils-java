@@ -33,16 +33,6 @@ public final class AuthContextTest extends BaseTest {
     }
 
     @Test
-    public final void shouldBeNotAuthenticatedEvenIfHasRole() {
-        assertThrows(UnauthenticatedException.class,
-                ()->{
-                    Auth user = new Auth(0L, "", new String[]{"ADMIN"});
-                    AuthContext authContext = new AuthContext(user, new Dec());
-                    authContext.hasRole("ADMIN");
-                });
-    }
-
-    @Test
     public final void shouldHaveRole() {
         Auth user = new Auth(0L, "name", new String[]{"ADMIN"});
         AuthContext authContext = new AuthContext(user, new Dec());
@@ -97,18 +87,6 @@ public final class AuthContextTest extends BaseTest {
                     Auth user = new Auth(0L, "name", new String[]{"ADMIN", "USER"});
                     AuthContext authContext = new AuthContext(user, new Dec());
                     authContext.hasAllRoles(new String[]{"USER", "FRIEND"});
-                });
-    }
-
-    @Test
-    public final void shouldBeNotAuthenticatedEvenIfHasPermission() {
-        assertThrows(UnauthenticatedException.class,
-                ()->{
-                    Map<String, List<String>> permissions = new HashMap<>();
-                    permissions.put("delete", Arrays.asList("OWNER", "ADMIN"));
-                    Auth user = new Auth(0L, "", new String[]{"ADMIN"});
-                    AuthContext authContext = new AuthContext(user, new Dec(permissions));
-                    authContext.hasPermission("delete");
                 });
     }
 
@@ -264,6 +242,64 @@ public final class AuthContextTest extends BaseTest {
                 });
     }
 
+    @Test
+    public final void shouldMatchAll() {
+        Auth user = new Auth(110L, "name", new String[]{"ADMIN", "USER"});
+        Owneable obj = new Owneable(110L);
+        AuthContext authContext = new AuthContext(user, new Dec());
+
+        authContext.isAuthenticated()
+                .all(
+                        (auth) -> auth.isOwnerWithRoles(obj, "USER"),
+                        (auth) -> auth.hasAllRoles("ADMIN", "USER")
+                );
+    }
+
+    @Test
+    public final void shouldNotMatchAll() {
+        assertThrows(UnauthorizedException.class,
+                ()->{
+                    Auth user = new Auth(110L, "name", new String[]{"USER"});
+                    Owneable obj = new Owneable(110L);
+                    AuthContext authContext = new AuthContext(user, new Dec());
+
+                    authContext.isAuthenticated()
+                            .all(
+                                    (auth) -> auth.isOwner(obj),
+                                    (auth) -> auth.hasAllRoles("ADMIN", "USER")
+                            );
+        });
+    }
+
+    @Test
+    public final void shouldMatchAny() {
+        Auth user = new Auth(110L, "name", new String[]{"ADMIN", "USER"});
+        Owneable obj = new Owneable(220L);
+        AuthContext authContext = new AuthContext(user, new Dec());
+
+        authContext.isAuthenticated()
+                .any(
+                        (auth) -> auth.isOwnerWithRoles(obj, "USER"),
+                        (auth) -> auth.hasAnyRole("ADMIN", "ONE", "TWO")
+                );
+    }
+
+    @Test
+    public final void shouldNotMatchAny() {
+        assertThrows(UnauthorizedException.class,
+                ()->{
+                    Auth user = new Auth(110L, "name", new String[]{"ADMIN", "USER"});
+                    Owneable obj = new Owneable(220L);
+                    AuthContext authContext = new AuthContext(user, new Dec());
+
+                    authContext.isAuthenticated()
+                            .any(
+                                    (auth) -> auth.isOwner(obj),
+                                    (auth) -> auth.hasAnyPermission("ADMIN")
+                            );
+        });
+    }
+
     class Dec implements RolesProvider {
 
         private final Map<String, List<String>> permissions;
@@ -292,6 +328,8 @@ public final class AuthContextTest extends BaseTest {
             return result;
         }
     }
+
+
 
     class Owneable implements Owned {
 
