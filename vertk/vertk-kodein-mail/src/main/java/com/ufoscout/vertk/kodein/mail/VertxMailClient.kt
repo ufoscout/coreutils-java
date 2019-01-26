@@ -5,7 +5,7 @@ import io.vertx.core.logging.LoggerFactory
 import io.vertx.ext.mail.MailClient
 import io.vertx.ext.mail.MailMessage
 import io.vertx.ext.mail.MailResult
-import io.vertx.kotlin.coroutines.awaitResult
+import io.vertx.kotlin.ext.mail.sendMailAwait
 
 class VertxMailClient(private val config: io.vertx.ext.mail.MailConfig, private val vertx: Vertx): com.ufoscout.vertk.kodein.mail.MailClient {
 
@@ -18,9 +18,7 @@ class VertxMailClient(private val config: io.vertx.ext.mail.MailConfig, private 
     }
 
     override suspend fun sendEmail(mailMessage: MailMessage): MailResult {
-        return awaitResult<MailResult> {
-            mailClient.sendMail(mailMessage, it)
-        }
+        return mailClient.sendMailAwait(mailMessage)
     }
 
 }

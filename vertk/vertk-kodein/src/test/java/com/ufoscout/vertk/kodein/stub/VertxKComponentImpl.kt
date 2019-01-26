@@ -1,11 +1,10 @@
 package com.ufoscout.vertk.kodein.stub
 
-import com.ufoscout.vertk.kodein.VertkKodeinStartable
 import java.util.concurrent.atomic.AtomicInteger
 
-class VertxKComponentImpl(val name: String) : VertkKodeinStartable {
+class VertxKComponentImpl {
 
-    override suspend fun start() {
+    constructor(name : String) {
         STARTED = true
         NAME = name
         COUNT.getAndIncrement()

@@ -11,20 +11,20 @@ import io.vertx.core.Vertx
 import io.vertx.core.json.Json
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
-import org.kodein.di.generic.singleton
+import org.kodein.di.generic.eagerSingleton
 
-class JsonModule(): VertkKodeinModule {
+class JsonModule: VertkKodeinModule {
 
     override fun module() = Kodein.Module {
-            bind<JsonSerializerService>() with singleton {
-                JsonSerializerService(JacksonJsonSerializerService(Json.mapper))
-            }
-    }
-
-    override suspend fun onInit(vertx: Vertx, kodein: Kodein) {
         initMapper(Json.mapper)
         initMapper(Json.prettyMapper)
+
+        bind<JsonSerializerService>() with eagerSingleton {
+            JsonSerializerService(JacksonJsonSerializerService(Json.mapper))
+        }
     }
+
+    override suspend fun onInit(vertx: Vertx, kodein: Kodein) {}
 
     private fun initMapper(mapper: ObjectMapper) {
         mapper.registerModule(KotlinModule())

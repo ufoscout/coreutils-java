@@ -1,12 +1,9 @@
-package com.ufoscout.vertk
+package com.ufoscout.coreutils.auth
 
-import io.vertx.core.Vertx
-import io.vertx.core.logging.LoggerFactory
-import io.vertx.kotlin.core.closeAwait
-import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInfo
+import org.slf4j.LoggerFactory
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
@@ -16,18 +13,6 @@ abstract class BaseTest {
     private val TIME_FORMAT = DecimalFormat("####,###.###", DecimalFormatSymbols(Locale.US))
     protected val logger = LoggerFactory.getLogger(this.javaClass)
     private var testStartDate: Long = 0
-
-    var vertk = Vertx.vertx()
-
-    @BeforeEach
-    fun baseSetUp() = runBlocking<Unit> {
-        vertk = Vertx.vertx()
-    }
-
-    @AfterEach
-    fun baseTearDown() = runBlocking<Unit> {
-        vertk.closeAwait()
-    }
 
     @BeforeEach
     fun setUpBeforeTest(testInfo: TestInfo) {

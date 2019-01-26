@@ -1,5 +1,6 @@
 package com.ufoscout.vertk.kodein
 
+import com.ufoscout.vertk.runBlocking
 import io.vertx.core.Vertx
 import io.vertx.core.eventbus.EventBus
 import io.vertx.core.file.FileSystem
@@ -21,6 +22,8 @@ object VertkKodein {
 
         log.info("Vertxk initialization start...")
 
+        log.info("Vertxk kodein modules creations...")
+
         val kodein = Kodein {
             import(jxInjectorModule)
             bind<Vertx>() with singleton { vertx }
@@ -30,31 +33,28 @@ object VertkKodein {
             build(this, *modules)
         }
 
-        log.info("Initialized VertxKComponents...")
-        val kdirect = kodein.direct
-        val instances: List<VertkKodeinStartable> = kdirect.allInstances()
-        instances.forEach { it.start() }
-
-        log.info("VertxKComponents started")
+        log.info("Vertxk kodein modules created successfully")
 
         vertx.registerVerticleFactory(VertkKodeinVerticleFactory(kodein))
 
-        log.info("Initialized VertxKModules...")
+        log.info("Initialize VertkKodeinModule...")
         for (module in modules) {
             log.info("Initialize VertkKodeinModule [${module.javaClass.name}]")
             module.onInit(vertx, kodein)
         }
 
-        log.info("Vertxk initialization completed")
+        log.info("Vertxk VertkKodeinModules initialization completed successfully")
 
         return kodein
     }
 
     private fun build(builder: Kodein.MainBuilder, vararg modules: VertkKodeinModule) {
-        for (module in modules) {
-            //Vertxk.log.debug("Import Kodein Module from ${module.javaClass.name}")
-            builder.import(module.module(), allowOverride = true)
-        }
+        //vertx.runBlocking {
+            for (module in modules) {
+                //Vertxk.log.debug("Import Kodein Module from ${module.javaClass.name}")
+                builder.import(module.module(), allowOverride = true)
+            }
+        //}
     }
 
 }

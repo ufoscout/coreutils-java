@@ -1,22 +1,37 @@
 package com.ufoscout.vertk.kodein.web
 
-import com.ufoscout.vertk.awaitListen
+import com.ufoscout.coreutils.validation.ValidationException
 import com.ufoscout.vertk.web.endWithJson
 import io.vertx.core.Handler
 import io.vertx.core.Vertx
 import io.vertx.core.http.HttpServerOptions
 import io.vertx.core.http.HttpServerRequest
 import io.vertx.core.http.HttpServerResponse
-import io.vertx.core.json.Json
 import io.vertx.core.logging.LoggerFactory
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
+import io.vertx.kotlin.core.http.listenAwait
 import java.util.*
 
-class RouterServiceImpl(val routerConfig: RouterConfig,
-                        val httpServerOptions: HttpServerOptions,
-                        val vertx: Vertx,
-                        val webExceptionService: WebExceptionService) : RouterService {
+class RouterServiceImpl private constructor(private val routerConfig: RouterConfig,
+                                            private val httpServerOptions: HttpServerOptions,
+                                            private val vertx: Vertx,
+                                            private val webExceptionService: WebExceptionService) : RouterService {
+
+    companion object {
+        fun new(routerConfig: RouterConfig,
+                httpServerOptions: HttpServerOptions,
+                vertx: Vertx,
+                webExceptionService: WebExceptionService): RouterService {
+
+            webExceptionService.registerTransformer<BadRequestException> { ex -> WebException(cause = ex, code = 400, message = ex.message!!) }
+            webExceptionService.registerTransformer<ValidationException> { ex -> WebException(cause = ex, code = 422, message = ex.message!!, details = ex.violations) }
+
+            val router = RouterServiceImpl(routerConfig, httpServerOptions, vertx, webExceptionService)
+            return router
+        }
+    }
+
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
@@ -34,8 +49,8 @@ class RouterServiceImpl(val routerConfig: RouterConfig,
 
     override suspend fun start() {
         val port = vertx.createHttpServer(httpServerOptions)
-                .requestHandler(Handler<HttpServerRequest> { mainRouter.accept(it) })
-                .awaitListen(routerConfig.port).actualPort()
+                .requestHandler(mainRouter)
+                .listenAwait(routerConfig.port).actualPort()
         logger.info("Router created and listening on port ${port}")
     }
 

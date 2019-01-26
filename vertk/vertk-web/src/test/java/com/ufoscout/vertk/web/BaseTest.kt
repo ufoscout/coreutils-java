@@ -1,12 +1,12 @@
 package com.ufoscout.vertk.web
 
-import com.ufoscout.vertk.awaitListen
 import io.vertx.core.Handler
 import io.vertx.core.Vertx
 import io.vertx.core.http.HttpServerRequest
 import io.vertx.core.logging.LoggerFactory
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.client.WebClient
+import io.vertx.kotlin.core.http.listenAwait
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.*
 import java.text.DecimalFormat
@@ -33,7 +33,7 @@ abstract class BaseTest {
             vertk = Vertx.vertx()
             router = Router.router(vertk)
             client = WebClient.create(vertk)
-            port = vertk.createHttpServer().requestHandler(Handler <HttpServerRequest> { router.accept(it) }).awaitListen(0).actualPort()
+            port = vertk.createHttpServer().requestHandler(Handler <HttpServerRequest> { router.accept(it) }).listenAwait(0).actualPort()
             println("Http Port " + port)
         }
 

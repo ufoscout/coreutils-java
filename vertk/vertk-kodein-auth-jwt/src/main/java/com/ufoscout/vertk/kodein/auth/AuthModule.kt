@@ -10,20 +10,19 @@ import com.ufoscout.vertk.kodein.VertkKodeinModule
 import io.vertx.core.Vertx
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
+import org.kodein.di.generic.eagerSingleton
 import org.kodein.di.generic.instance
-import org.kodein.di.generic.singleton
 
 class AuthModule(val jwtConfig: JwtConfig): VertkKodeinModule {
 
     override fun module() = Kodein.Module {
-        bind<AuthSetup>() with singleton { AuthSetup(instance()) }
-        bind<AuthService>() with singleton {
+        bind<AuthService>() with eagerSingleton {
             AuthServiceImpl(instance())
         }
-        bind<AuthContextService>() with singleton {
-            AuthContextServiceImpl(instance(), instance())
+        bind<AuthContextService>() with eagerSingleton {
+            AuthContextServiceImpl(instance(), instance(), instance())
         }
-        bind<JwtService>() with singleton {
+        bind<JwtService>() with eagerSingleton {
             JwtService(JwtServiceJJWT(jwtConfig, CoreJsonProvider(instance())))
         }
     }

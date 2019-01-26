@@ -1,8 +1,7 @@
 package com.ufoscout.vertk.kodein.web
 
 import com.ufoscout.coreutils.validation.SimpleValidatorService
-import com.ufoscout.coreutils.validation.ValidationException
-import com.ufoscout.vertk.web.awaitRestPost
+import com.ufoscout.vertk.web.postRestAwait
 import io.vertx.kotlin.coroutines.CoroutineVerticle
 import java.lang.RuntimeException
 
@@ -41,13 +40,13 @@ class TestWebController(val routerService: RouterService, val webExceptionServic
             it.response().end("ok")
         }
 
-        router.awaitRestPost<BeanToValidate>("/core/test/validationException", { rc, bean ->
+        router.postRestAwait<BeanToValidate>("/core/test/validationException") { _, bean ->
             SimpleValidatorService().validator<BeanToValidate>()
                     .add("id", "id should not be null", {it.id!=null})
                     .add("name", "name should not be null", {it.name!=null})
                     .build()
                     .validateThrowException(bean)
-        })
+        }
 
     }
 

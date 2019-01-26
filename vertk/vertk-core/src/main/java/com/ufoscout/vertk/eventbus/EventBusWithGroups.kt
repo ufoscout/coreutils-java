@@ -1,12 +1,13 @@
 package com.ufoscout.vertk.eventbus
 
-import com.ufoscout.vertk.shared.awaitGetAsyncMap
-import com.ufoscout.vertk.shared.awaitPut
-import com.ufoscout.vertk.shared.awaitRemoveIfPresent
-import com.ufoscout.vertk.shared.awaitValues
+import com.ufoscout.vertk.shared.valuesAwait
 import io.vertx.core.Vertx
 import io.vertx.core.eventbus.Message
 import io.vertx.core.shareddata.AsyncMap
+import io.vertx.kotlin.core.eventbus.unregisterAwait
+import io.vertx.kotlin.core.shareddata.getAsyncMapAwait
+import io.vertx.kotlin.core.shareddata.putAwait
+import io.vertx.kotlin.core.shareddata.removeIfPresentAwait
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -62,7 +63,7 @@ class EventBusWithGroups<T>(val vertx: Vertx, val address: Addr<T>) {
                 address = address,
                 groupName = groupName,
                 map = load(),
-                vertxConsumer = vertx.eventBus().awaitConsumer<T>(put(groupName, member), handler)
+                vertxConsumer = vertx.eventBus().consumerAwait<T>(put(groupName, member), handler)
         )
     }
 
@@ -71,7 +72,7 @@ class EventBusWithGroups<T>(val vertx: Vertx, val address: Addr<T>) {
         val addressMember = createAddressMember(address.address, route, member)
         val addressRoute = createAddressRoute(address.address, route)
 
-        map.awaitPut(addressMember, addressRoute)
+        map.putAwait(addressMember, addressRoute)
         LOG.debug("Added - address: {}, publish: {}", address, route)
 
         return addressRoute
@@ -83,7 +84,7 @@ class EventBusWithGroups<T>(val vertx: Vertx, val address: Addr<T>) {
     suspend fun publish(message: T) {
         val map = load()
         LOG.trace("Routing - address: {}, message: {}", address, message)
-        val routes = HashSet<String>(map.awaitValues())
+        val routes = HashSet<String>(map.valuesAwait())
         if (!routes.isEmpty()) {
             routes.forEach { route -> vertx.eventBus().send(route, message) }
         } else {
@@ -93,7 +94,7 @@ class EventBusWithGroups<T>(val vertx: Vertx, val address: Addr<T>) {
 
     private suspend fun load(): AsyncMap<String, String> {
         if (table == null) {
-            table = vertx.sharedData().awaitGetAsyncMap<String, String>(address.address)
+            table = vertx.sharedData().getAsyncMapAwait<String, String>(address.address)
             LOG.debug("Loaded - address: {}", address)
         }
         return table!!
@@ -117,9 +118,9 @@ class GroupMessageConsumer<T>(
         val addressMember = EventBusWithGroups.createAddressMember(address.address, groupName, member)
         val addressRoute = EventBusWithGroups.createAddressRoute(address.address, groupName)
 
-        if (map.awaitRemoveIfPresent(addressMember, addressRoute)) {
+        if (map.removeIfPresentAwait(addressMember, addressRoute)) {
             LOG.debug("Removed - address: {}, publish: {}", address, groupName)
-            vertxConsumer.awaitUnregister()
+            vertxConsumer.unregisterAwait()
         } else {
             LOG.error("Failed to remove - address: {}, publish: {}", address, groupName)
         }

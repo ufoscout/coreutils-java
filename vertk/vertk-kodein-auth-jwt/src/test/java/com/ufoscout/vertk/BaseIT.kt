@@ -4,11 +4,12 @@ import com.ufoscout.coreutils.jwt.JwtConfig
 import com.ufoscout.vertk.kodein.AuthTestModule
 import com.ufoscout.vertk.kodein.VertkKodein
 import com.ufoscout.vertk.kodein.auth.AuthModule
-import com.ufoscout.vertk.kodein.web.RouterConfig
 import com.ufoscout.vertk.kodein.json.JsonModule
+import com.ufoscout.vertk.kodein.web.RouterConfig
 import com.ufoscout.vertk.kodein.web.RouterModule
 import io.vertx.core.Vertx
 import io.vertx.core.http.HttpServerOptions
+import io.vertx.kotlin.core.closeAwait
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -44,7 +45,7 @@ abstract class BaseIT : BaseTest() {
 
         @AfterAll @JvmStatic
         fun tearDownClass() = runBlocking<Unit> {
-            vertk!!.awaitClose()
+            vertk!!.closeAwait()
         }
 
         @Synchronized private fun getFreePort(): Int {
