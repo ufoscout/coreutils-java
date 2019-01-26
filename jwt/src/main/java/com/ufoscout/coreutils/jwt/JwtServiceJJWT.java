@@ -33,25 +33,26 @@ public class JwtServiceJJWT implements JwtService {
     }
 
     @Override
-    public <T> String generate(final T payload) {
+    public <T> Token generate(final T payload) {
         return generate("", payload);
     }
 
     @Override
-    public <T> String generate(final String subject, final T payload) {
+    public <T> Token generate(final String subject, final T payload) {
         final Date createdDate = new Date();
         return generate(subject, payload, createdDate, calculateExpirationDate(createdDate));
     }
 
     @Override
-    public <T> String generate(final String subject, final T payload, Date createdDate, Date expirationDate) {
-        return Jwts.builder()
+    public <T> Token generate(final String subject, final T payload, Date createdDate, Date expirationDate) {
+        String token = Jwts.builder()
                 .setSubject(subject)
                 .claim(PAYLOAD_CLAIM_KEY, jsonProvider.toJson(payload))
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
                 .signWith(signatureAlgorithm, secret)
                 .compact();
+        return new Token(token, createdDate, expirationDate);
     }
 
     @Override

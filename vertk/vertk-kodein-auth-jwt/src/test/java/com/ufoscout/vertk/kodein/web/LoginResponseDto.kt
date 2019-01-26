@@ -1,5 +1,7 @@
 package com.ufoscout.vertk.kodein.web
 
-data class LoginResponseDto (val token: String) {
+import com.ufoscout.coreutils.jwt.Token
+
+data class LoginResponseDto (val token: Token) {
 
 }

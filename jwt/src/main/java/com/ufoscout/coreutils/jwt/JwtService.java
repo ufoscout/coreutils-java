@@ -15,7 +15,7 @@ public interface JwtService {
      * @param payload the JWT payload
      * @return
      */
-    <T> String generate(T payload);
+    <T> Token generate(T payload);
 
     /**
 	 * Generates a JWT from the payload
@@ -23,7 +23,7 @@ public interface JwtService {
 	 * @param payload the JWT payload
 	 * @return
 	 */
-    <T> String generate(String subject, T payload);
+    <T> Token generate(String subject, T payload);
 
     /**
      * Generates a JWT from the payload
@@ -33,7 +33,7 @@ public interface JwtService {
      * @param expirationDate the expiration Date
      * @return
      */
-    <T> String generate(final String subject, final T payload, Date createdDate, Date expirationDate);
+    <T> Token generate(final String subject, final T payload, Date createdDate, Date expirationDate);
 
     /**
      * Parses a JWT and return the contained bean.

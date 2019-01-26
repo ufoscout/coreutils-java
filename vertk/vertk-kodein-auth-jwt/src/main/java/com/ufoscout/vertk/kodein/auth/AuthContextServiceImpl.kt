@@ -3,6 +3,7 @@ package com.ufoscout.vertk.kodein.auth
 import com.ufoscout.coreutils.auth.Auth
 import com.ufoscout.coreutils.auth.AuthContext
 import com.ufoscout.coreutils.auth.AuthService
+import com.ufoscout.coreutils.jwt.Token
 import com.ufoscout.coreutils.jwt.kotlin.JwtService
 import io.vertx.core.http.HttpServerRequest
 
@@ -35,7 +36,7 @@ open class AuthContextServiceImpl(
         return from(Auth())
     }
 
-    override fun generateToken(auth: Auth): String {
+    override fun generateToken(auth: Auth): Token {
         return jwtService.generate(auth.username, auth)
     }
 
