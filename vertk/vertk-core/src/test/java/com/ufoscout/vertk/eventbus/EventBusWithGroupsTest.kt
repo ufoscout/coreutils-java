@@ -3,7 +3,8 @@ package com.ufoscout.vertk.eventbus;
 import com.ufoscout.vertk.BaseTest
 import com.ufoscout.vertk.eventBusWithGroups
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit

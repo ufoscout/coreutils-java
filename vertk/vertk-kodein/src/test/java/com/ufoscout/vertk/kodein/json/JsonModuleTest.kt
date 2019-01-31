@@ -1,8 +1,8 @@
 package com.ufoscout.vertk.kodein.json
 
 import com.ufoscout.coreutils.json.kotlin.JsonSerializerService
-import com.ufoscout.vertk.kodein.VertkKodein
 import com.ufoscout.vertk.BaseTest
+import com.ufoscout.vertk.kodein.VertkKodein
 import io.vertx.core.Vertx
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*

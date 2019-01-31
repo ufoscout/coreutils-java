@@ -1,9 +1,8 @@
 package com.ufoscout.coreutils.auth
 
-import org.junit.jupiter.api.Test
-
-import java.util.*
 import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
+import java.util.*
 
 class AuthExtTest : BaseTest() {
 

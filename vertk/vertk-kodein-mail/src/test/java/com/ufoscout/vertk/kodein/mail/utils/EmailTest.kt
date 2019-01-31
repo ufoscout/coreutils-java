@@ -1,8 +1,8 @@
 package com.ufoscout.vertk.kodein.mail.utils
 
 import com.ufoscout.vertk.BaseTest
-
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 internal class EmailTest : BaseTest() {

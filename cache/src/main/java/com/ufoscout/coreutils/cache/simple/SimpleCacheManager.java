@@ -1,12 +1,12 @@
 package com.ufoscout.coreutils.cache.simple;
 
+import com.ufoscout.coreutils.cache.Cache;
+import com.ufoscout.coreutils.cache.noops.NoOpsCache;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.ufoscout.coreutils.cache.Cache;
-import com.ufoscout.coreutils.cache.noops.NoOpsCache;
 
 /**
  * 

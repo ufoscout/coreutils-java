@@ -1,17 +1,12 @@
 package com.ufoscout.coreutils.auth;
 
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
+import java.util.Map.Entry;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.junit.jupiter.api.Test;
 
 public final class AuthContextTest extends BaseTest {
 

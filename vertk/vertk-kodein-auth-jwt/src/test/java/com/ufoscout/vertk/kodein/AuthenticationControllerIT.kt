@@ -5,8 +5,8 @@ import com.ufoscout.coreutils.auth.AuthService
 import com.ufoscout.coreutils.jwt.kotlin.JwtService
 import com.ufoscout.vertk.BaseIT
 import com.ufoscout.vertk.kodein.auth.AuthContants
-import com.ufoscout.vertk.kodein.web.ErrorDetails
 import com.ufoscout.vertk.kodein.web.AuthenticationController
+import com.ufoscout.vertk.kodein.web.ErrorDetails
 import com.ufoscout.vertk.kodein.web.LoginDto
 import com.ufoscout.vertk.kodein.web.LoginResponseDto
 import com.ufoscout.vertk.web.client.bodyAsJson

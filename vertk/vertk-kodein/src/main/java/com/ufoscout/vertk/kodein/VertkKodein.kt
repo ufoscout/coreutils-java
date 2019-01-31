@@ -1,14 +1,11 @@
 package com.ufoscout.vertk.kodein
 
-import com.ufoscout.vertk.runBlocking
 import io.vertx.core.Vertx
 import io.vertx.core.eventbus.EventBus
 import io.vertx.core.file.FileSystem
 import io.vertx.core.logging.LoggerFactory
 import io.vertx.core.shareddata.SharedData
 import org.kodein.di.Kodein
-import org.kodein.di.direct
-import org.kodein.di.generic.allInstances
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.singleton
 import org.kodein.di.jxinject.jxInjectorModule
