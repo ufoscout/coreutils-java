@@ -1,8 +1,9 @@
 package com.ufoscout.coreutils.auth;
 
+import lombok.AllArgsConstructor;
+
 import java.util.List;
 import java.util.Map;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class RoleStore {

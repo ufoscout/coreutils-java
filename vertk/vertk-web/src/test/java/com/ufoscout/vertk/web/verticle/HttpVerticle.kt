@@ -1,6 +1,5 @@
 package com.ufoscout.vertk.web.verticle
 
-import com.ufoscout.vertk.web.BaseTest
 import com.ufoscout.vertk.web.*
 import io.vertx.kotlin.coroutines.CoroutineVerticle
 import java.util.*

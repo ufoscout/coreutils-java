@@ -2,7 +2,6 @@ package com.ufoscout.vertk.shared
 
 import io.vertx.core.shareddata.AsyncMap
 import io.vertx.kotlin.core.shareddata.getAwait
-import io.vertx.kotlin.core.shareddata.putAwait
 import io.vertx.kotlin.core.shareddata.putIfAbsentAwait
 import io.vertx.kotlin.coroutines.awaitResult
 

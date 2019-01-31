@@ -3,7 +3,6 @@ package com.ufoscout.coreutils.jwt;
 import com.ufoscout.coreutils.json.JacksonJsonSerializerService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +18,7 @@ public class JWTServiceJJWTTest extends BaseTest {
 
 	@BeforeEach
 	public void setUp() {
-		jwtService = new JwtServiceJJWT(new JwtConfig("secretKey1234567891234sertvewrtbyrbhsyweybrtybwtybwyvsdvsyweysvhgsgv567890sadkfsadihxckvbkasbgkvakcgqirwthwkjbfakfbsl", SignatureAlgorithm.HS512.getValue(), expireMinutes),
+		jwtService = new JwtServiceJJWT(new JwtConfig("secretKey1234567891234secretKey1234567891234secretKey1234567891234", SignatureAlgorithm.HS512.getValue(), expireMinutes),
                 new CoreJsonProvider(new JacksonJsonSerializerService()));
 	}
 
@@ -79,7 +78,7 @@ public class JWTServiceJJWTTest extends BaseTest {
 
     @Test
     public void shouldFailParsingTamperedJwt() {
-        assertThrows(SignatureException.class,
+        assertThrows(io.jsonwebtoken.security.SecurityException.class,
                 ()->{
                     final SimpleMailMessage message = new SimpleMailMessage();
                     message.from = "from-" + UUID.randomUUID();

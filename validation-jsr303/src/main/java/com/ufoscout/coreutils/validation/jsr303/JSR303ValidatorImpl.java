@@ -2,8 +2,6 @@ package com.ufoscout.coreutils.validation.jsr303;
 
 import com.ufoscout.coreutils.validation.Rule;
 import com.ufoscout.coreutils.validation.ValidationResultImpl;
-import com.ufoscout.coreutils.validation.Validator;
-import com.ufoscout.coreutils.validation.ValidatorBuilder;
 
 import javax.validation.ConstraintViolation;
 import java.util.ArrayList;

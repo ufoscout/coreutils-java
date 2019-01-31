@@ -1,14 +1,14 @@
 package com.ufoscout.coreutils.cache.simple;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.ufoscout.coreutils.cache.BaseTest;
 import com.ufoscout.coreutils.cache.Cache;
 import com.ufoscout.coreutils.cache.CacheManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

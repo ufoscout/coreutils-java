@@ -1,9 +1,8 @@
 package com.ufoscout.coreutils.validation.jsr303;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.validation.Valid;
 
 
 /**

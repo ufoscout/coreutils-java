@@ -4,7 +4,8 @@ import com.ufoscout.vertk.BaseTest
 import io.vertx.ext.mail.MailMessage
 import io.vertx.ext.mail.MailResult
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 internal class InMemoryMailClientTest: BaseTest() {
