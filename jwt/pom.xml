@@ -14,7 +14,6 @@
         <dependency>
             <groupId>com.ufoscout.coreutils</groupId>
             <artifactId>json</artifactId>
-            <version>${project.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -48,7 +47,8 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
-        </dependency>    </dependencies>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>

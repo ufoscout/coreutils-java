@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.ufoscout.vertk</groupId>
-    <artifactId>vertk-parent</artifactId>
+    <artifactId>vertk-bom</artifactId>
     <packaging>pom</packaging>
 
     <modules>
@@ -38,31 +38,48 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
             <dependency>
-                <groupId>com.ufoscout.coreutils</groupId>
-                <artifactId>json-kotlin</artifactId>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.ufoscout.coreutils</groupId>
-                <artifactId>jwt-kotlin</artifactId>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-cron</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.ufoscout.coreutils</groupId>
-                <artifactId>auth-kotlin</artifactId>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-kodein</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.ufoscout.coreutils</groupId>
-                <artifactId>validation</artifactId>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-kodein-auth-jwt</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-reflect</artifactId>
-                <version>${kotlin.version}</version>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-kodein-mail</artifactId>
+                <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-kodein-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-web-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.kodein.di</groupId>
                 <artifactId>kodein-di-generic-jvm</artifactId>

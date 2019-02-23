@@ -18,7 +18,6 @@
     <dependency>
       <groupId>com.ufoscout.coreutils</groupId>
       <artifactId>auth</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>

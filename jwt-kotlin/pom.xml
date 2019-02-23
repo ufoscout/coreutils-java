@@ -18,12 +18,10 @@
     <dependency>
       <groupId>com.ufoscout.coreutils</groupId>
       <artifactId>jwt</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.ufoscout.coreutils</groupId>
       <artifactId>json-kotlin</artifactId>
-      <version>${project.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
