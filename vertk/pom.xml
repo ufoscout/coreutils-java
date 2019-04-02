@@ -26,7 +26,7 @@
 
     <properties>
         <koin.version>2.0.0-rc-2</koin.version>
-        <vertx.version>3.6.3</vertx.version>
+        <vertx.version>3.7.0</vertx.version>
     </properties>
 
     <dependencyManagement>

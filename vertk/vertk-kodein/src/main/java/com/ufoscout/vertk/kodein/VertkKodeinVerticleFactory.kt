@@ -17,7 +17,8 @@ class VertkKodeinVerticleFactory(val koin: Koin) : VerticleFactory {
     override fun createVerticle(verticleName: String, classLoader: ClassLoader): Verticle {
         val className = VerticleFactory.removePrefix(verticleName)
         val clazz = classLoader.loadClass(className)
-        return koin.get<Verticle>(clazz = clazz.kotlin, name = null, parameters = null, scope = null)
+
+        return koin.get<Verticle>(clazz = clazz.kotlin, qualifier = null, parameters = null)
     }
 
 }

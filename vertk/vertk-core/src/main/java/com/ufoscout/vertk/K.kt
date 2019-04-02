@@ -32,27 +32,27 @@ fun <T> Vertx.runBlocking(action: suspend () -> T): T {
 }
 
 suspend fun <R> Vertx.executeBlockingAwait(action: () -> R): R {
-    val handler: Handler<Future<R>> = Handler {
+    val handler = { future: Future<R> ->
         try {
             val result = action()
-            it.complete(result)
+            future.complete(result)
         } catch (e: Throwable) {
-            it.fail(e)
+            future.fail(e)
         }
     }
     return this.executeBlockingAwait(handler)!!
 }
 
 suspend fun <R> Vertx.executeBlockingAwait(action: () -> R, ordered: Boolean): R {
-        val handler: Handler<Future<R>> = Handler {
-            try {
-                val result = action()
-                it.complete(result)
-            } catch (e: Throwable) {
-                it.fail(e)
-            }
+    val handler = { future: Future<R> ->
+        try {
+            val result = action()
+            future.complete(result)
+        } catch (e: Throwable) {
+            future.fail(e)
         }
-        return this.executeBlockingAwait(handler, ordered)!!
+    }
+    return this.executeBlockingAwait(handler, ordered)!!
 }
 
 suspend fun Vertx.deployVerticleAwait(verticle: Verticle, deploymentOptions: DeploymentOptions) {
