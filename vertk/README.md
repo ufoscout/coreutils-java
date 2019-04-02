@@ -2,62 +2,62 @@
 
 Vertxk is a set of tools to simplify [Vertx](http://vertk.io/) application development in [Kotlin Programming Language](https://kotlinlang.org/) 
 
-## VertxK: Dependency injection with [Kodein](https://github.com/SalomonBrys/Kodein)
-[Kodein](https://github.com/SalomonBrys/Kodein) is a simple, easy to use and easy to configure dependency retrieval container.
+## VertxK: Dependency injection with [bit](https://github.com/SalomonBrys/bit)
+[bit](https://github.com/SalomonBrys/bit) is a simple, easy to use and easy to configure dependency retrieval container.
 
 By default, Vertx does not provide any real support for dependency injection framerworks. 
 
-Vertxk solves this issue enabling simple DI in Vertx Verticles through Kodein. 
+Vertxk solves this issue enabling simple DI in Vertx Verticles through bit. 
 
 BTW, it works with coroutines too!
 
 Some Features
 -------------
 - Only 20Kb 
-- No external dependencies (well... it requires Vertx and Kodein of course!)
-- Works with Vertx 3.5+ and Kodein 4.1+ 
+- No external dependencies (well... it requires Vertx and bit of course!)
+- Works with Vertx 3.5+ and bit 4.1+ 
 
 Getting Started
 ---------------
 
-1. To get started, add vertk-kodein dependency to your project:
+1. To get started, add vertk-bit dependency to your project:
  
 ```xml
         <dependency>
             <groupId>com.ufoscout.vertk</groupId>
-            <artifactId>vertk-kodein</artifactId>
+            <artifactId>vertk-bit</artifactId>
             <version>${vertk.version}</version>
         </dependency>
 ```
 
-2. Inject the VertxkKodein Module in your Kodein Container:
+2. Inject the VertxkBit Module in your bit Container:
 
 ```Kotlin
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.jxinject.jxInjectorModule
-import com.ufoscout.vertk.VertxkKodein
+import com.github.salomonbrys.bit.bit
+import com.github.salomonbrys.bit.jxinject.jxInjectorModule
+import com.ufoscout.vertk.VertxkBit
 ...
 
         // setup vertk
         val vertk = Vertx.vertx()
 
-        val kodein = Kodein {
+        val bit = bit {
             import(jxInjectorModule)
-            import(VertxkKodein.module(vertk))
+            import(VertxkBit.module(vertk))
             import(// IMPORT YOUR MODULES)
         }
 
-        VertxkKodein.registerFactory(vertk, kodein)
+        VertxkBit.registerFactory(vertk, bit)
 
         awaitResult<String> {
-            VertxkKodein.deployVerticle<MainVerticle>(vertk, it)
+            VertxkBit.deployVerticle<MainVerticle>(vertk, it)
         }
 ```
 
 3. Register vertk Factory in Vertx:
 
 ```Kotlin
-        VertxkKodein.registerFactory(vertk, kodein)
+        VertxkBit.registerFactory(vertk, bit)
 ```
 
 4. Everything's ready now! You can now inject whatever bean in your Verticles:
@@ -79,7 +79,7 @@ class MyVerticle (val myServiceOne: MyServiceOne, val myServiceTwo: MyServiceTwo
 ```Kotlin
     // With coroutines. it works even with default async deploy.   
     awaitResult<String> {
-        VertxkKodein.deployVerticle<MyVerticle>(vertk, it)
+        VertxkBit.deployVerticle<MyVerticle>(vertk, it)
     }
 ```
 
@@ -99,21 +99,21 @@ class MyVerticle (val myServiceOne: MyServiceOne, val myServiceTwo: MyServiceTwo
 } 
 ```
 
-Instantiate Vertx and Kodein:
+Instantiate Vertx and bit:
 
 ```Kotlin
         val vertk = Vertx.vertx()
 
-        val kodein = Kodein {
+        val bit = bit {
             import(jxInjectorModule)
-            import(VertxkKodein.module(vertk))
+            import(VertxkBit.module(vertk))
             import(// IMPORT YOUR MODULES)
         }
 
-        VertxkKodein.registerFactory(vertk, kodein)
+        VertxkBit.registerFactory(vertk, bit)
 
         awaitResult<String> {
-            VertxkKodein.deployVerticle<MyVerticle>(vertk, it)
+            VertxkBit.deployVerticle<MyVerticle>(vertk, it)
         }
 ```
 

@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.ufoscout.coreutils</groupId>
         <artifactId>coreutils</artifactId>
-        <version>3.8.2-SNAPSHOT</version>
+        <version>3.9.0-SNAPSHOT</version>
     </parent>
 
     <groupId>com.ufoscout.vertk</groupId>
@@ -18,10 +18,10 @@
         <module>vertk-cron</module>
         <module>vertk-web-client</module>
         <module>vertk-web</module>
-        <module>vertk-kodein</module>
-        <module>vertk-kodein-web</module>
-        <module>vertk-kodein-auth-jwt</module>
-        <module>vertk-kodein-mail</module>
+        <module>vertk-bit</module>
+        <module>vertk-bit-web</module>
+        <module>vertk-bit-auth-jwt</module>
+        <module>vertk-bit-mail</module>
     </modules>
 
     <properties>
@@ -51,22 +51,22 @@
             </dependency>
             <dependency>
                 <groupId>com.ufoscout.vertk</groupId>
-                <artifactId>vertk-kodein</artifactId>
+                <artifactId>vertk-bit</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ufoscout.vertk</groupId>
-                <artifactId>vertk-kodein-auth-jwt</artifactId>
+                <artifactId>vertk-bit-auth-jwt</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ufoscout.vertk</groupId>
-                <artifactId>vertk-kodein-mail</artifactId>
+                <artifactId>vertk-bit-mail</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ufoscout.vertk</groupId>
-                <artifactId>vertk-kodein-web</artifactId>
+                <artifactId>vertk-bit-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
