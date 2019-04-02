@@ -1,6 +1,7 @@
 package com.ufoscout.coreutils.validation.jsr303;
 
-import com.ufoscout.coreutils.validation.*;
+import com.ufoscout.coreutils.validation.BaseTest;
+import com.ufoscout.coreutils.validation.ValidationResult;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.groups.Default;

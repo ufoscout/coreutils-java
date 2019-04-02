@@ -68,7 +68,7 @@ class AuthenticationControllerIT : BaseIT() {
 
         val sentAuthContext = Auth(0, UUID.randomUUID().toString(), arrayOf("ADMIN", "OTHER"))
 
-        val token = jwt.generate(sentAuthContext)
+        val token = jwt.generate(sentAuthContext).token
 
         val headers = Pair(AuthContants.JWT_TOKEN_HEADER, "${AuthContants.JWT_TOKEN_HEADER_SUFFIX}$token")
 
@@ -112,7 +112,7 @@ class AuthenticationControllerIT : BaseIT() {
         val responseDto = response.bodyAsJson<LoginResponseDto>()
         assertNotNull(responseDto)
         assertNotNull(responseDto!!.token)
-        val userContext = jwt.parse(responseDto.token, Auth::class)
+        val userContext = jwt.parse(responseDto.token.token, Auth::class)
         assertEquals("user", userContext.username)
         assertEquals(1, arrayOf(userContext.roles).size)
         assertEquals("USER", authService.getByName(*userContext.roles)[0].name)
@@ -142,7 +142,7 @@ class AuthenticationControllerIT : BaseIT() {
 
         val sentAuthContext = Auth(0, UUID.randomUUID().toString())
 
-        val token = jwt.generate(sentAuthContext)
+        val token = jwt.generate(sentAuthContext).token
 
         val headers = Pair(AuthContants.JWT_TOKEN_HEADER, "${AuthContants.JWT_TOKEN_HEADER_SUFFIX}$token")
 
@@ -163,7 +163,7 @@ class AuthenticationControllerIT : BaseIT() {
 
         val sentAuthContext = Auth(0, UUID.randomUUID().toString(), arrayOf("ADMIN"))
 
-        val token = jwt.generate(sentAuthContext)
+        val token = jwt.generate(sentAuthContext).token
 
         val headers = Pair(AuthContants.JWT_TOKEN_HEADER, "${AuthContants.JWT_TOKEN_HEADER_SUFFIX}$token")
 
@@ -182,7 +182,7 @@ class AuthenticationControllerIT : BaseIT() {
 
         val sentAuthContext = Auth(0, UUID.randomUUID().toString())
 
-        val token = jwt.generate("", sentAuthContext, Date(System.currentTimeMillis() - 1000), Date(System.currentTimeMillis() - 1000))
+        val token = jwt.generate("", sentAuthContext, Date(System.currentTimeMillis() - 1000), Date(System.currentTimeMillis() - 1000)).token
 
         val headers = Pair(AuthContants.JWT_TOKEN_HEADER, "${AuthContants.JWT_TOKEN_HEADER_SUFFIX}$token")
 

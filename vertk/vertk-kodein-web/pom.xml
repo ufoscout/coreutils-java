@@ -4,8 +4,8 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.ufoscout.vertk</groupId>
-    <artifactId>vertk-parent</artifactId>
-    <version>3.7.1-SNAPSHOT</version>
+    <artifactId>vertk-bom</artifactId>
+    <version>3.8.2-SNAPSHOT</version>
   </parent>
   <artifactId>vertk-kodein-web</artifactId>
 
@@ -13,17 +13,14 @@
     <dependency>
       <groupId>com.ufoscout.vertk</groupId>
       <artifactId>vertk-kodein</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.ufoscout.vertk</groupId>
       <artifactId>vertk-web</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.ufoscout.vertk</groupId>
       <artifactId>vertk-web-client</artifactId>
-      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

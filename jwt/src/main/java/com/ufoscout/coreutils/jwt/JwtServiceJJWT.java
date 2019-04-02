@@ -4,8 +4,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
-import java.time.Instant;
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**
@@ -18,14 +20,14 @@ public class JwtServiceJJWT implements JwtService {
 
     final static String PAYLOAD_CLAIM_KEY = "payload";
     private final SignatureAlgorithm signatureAlgorithm;
-    private String secret;
+    private SecretKey secret;
     private long tokenValidityMinutes;
     private final JsonProvider jsonProvider;
 
     public JwtServiceJJWT(
             JwtConfig jwtConfig,
             final JsonProvider jsonSerializerService) {
-        this.secret = jwtConfig.getSecret();
+        this.secret = Keys.hmacShaKeyFor(jwtConfig.getSecret().getBytes(StandardCharsets.UTF_8));
         this.signatureAlgorithm = SignatureAlgorithm.forName(jwtConfig.getSignatureAlgorithm());
         this.tokenValidityMinutes = jwtConfig.getTokenValidityMinutes();
         this.jsonProvider = jsonSerializerService;
@@ -33,25 +35,26 @@ public class JwtServiceJJWT implements JwtService {
     }
 
     @Override
-    public <T> String generate(final T payload) {
+    public <T> Token generate(final T payload) {
         return generate("", payload);
     }
 
     @Override
-    public <T> String generate(final String subject, final T payload) {
+    public <T> Token generate(final String subject, final T payload) {
         final Date createdDate = new Date();
         return generate(subject, payload, createdDate, calculateExpirationDate(createdDate));
     }
 
     @Override
-    public <T> String generate(final String subject, final T payload, Date createdDate, Date expirationDate) {
-        return Jwts.builder()
+    public <T> Token generate(final String subject, final T payload, Date createdDate, Date expirationDate) {
+        String token = Jwts.builder()
                 .setSubject(subject)
                 .claim(PAYLOAD_CLAIM_KEY, jsonProvider.toJson(payload))
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
-                .signWith(signatureAlgorithm, secret)
+                .signWith(secret, signatureAlgorithm)
                 .compact();
+        return new Token(token, createdDate, expirationDate);
     }
 
     @Override

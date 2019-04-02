@@ -1,8 +1,8 @@
 package com.ufoscout.vertk.kodein.web
 
+import com.ufoscout.vertk.BaseTest
 import com.ufoscout.vertk.kodein.VertkKodein
 import com.ufoscout.vertk.kodein.json.JsonModule
-import com.ufoscout.vertk.BaseTest
 import com.ufoscout.vertk.web.client.bodyAsJson
 import io.vertx.core.http.HttpServerOptions
 import io.vertx.ext.web.client.WebClient

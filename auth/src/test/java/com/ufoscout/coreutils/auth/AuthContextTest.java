@@ -1,17 +1,12 @@
 package com.ufoscout.coreutils.auth;
 
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
+import java.util.Map.Entry;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.junit.jupiter.api.Test;
 
 public final class AuthContextTest extends BaseTest {
 
@@ -29,16 +24,6 @@ public final class AuthContextTest extends BaseTest {
                     Auth user = new Auth(0L, "", new String[0]);
                     AuthContext authContext = new AuthContext(user, new Dec());
                     authContext.isAuthenticated();
-                });
-    }
-
-    @Test
-    public final void shouldBeNotAuthenticatedEvenIfHasRole() {
-        assertThrows(UnauthenticatedException.class,
-                ()->{
-                    Auth user = new Auth(0L, "", new String[]{"ADMIN"});
-                    AuthContext authContext = new AuthContext(user, new Dec());
-                    authContext.hasRole("ADMIN");
                 });
     }
 
@@ -97,18 +82,6 @@ public final class AuthContextTest extends BaseTest {
                     Auth user = new Auth(0L, "name", new String[]{"ADMIN", "USER"});
                     AuthContext authContext = new AuthContext(user, new Dec());
                     authContext.hasAllRoles(new String[]{"USER", "FRIEND"});
-                });
-    }
-
-    @Test
-    public final void shouldBeNotAuthenticatedEvenIfHasPermission() {
-        assertThrows(UnauthenticatedException.class,
-                ()->{
-                    Map<String, List<String>> permissions = new HashMap<>();
-                    permissions.put("delete", Arrays.asList("OWNER", "ADMIN"));
-                    Auth user = new Auth(0L, "", new String[]{"ADMIN"});
-                    AuthContext authContext = new AuthContext(user, new Dec(permissions));
-                    authContext.hasPermission("delete");
                 });
     }
 
@@ -264,6 +237,64 @@ public final class AuthContextTest extends BaseTest {
                 });
     }
 
+    @Test
+    public final void shouldMatchAll() {
+        Auth user = new Auth(110L, "name", new String[]{"ADMIN", "USER"});
+        Owneable obj = new Owneable(110L);
+        AuthContext authContext = new AuthContext(user, new Dec());
+
+        authContext.isAuthenticated()
+                .all(
+                        (auth) -> auth.isOwnerWithRoles(obj, "USER"),
+                        (auth) -> auth.hasAllRoles("ADMIN", "USER")
+                );
+    }
+
+    @Test
+    public final void shouldNotMatchAll() {
+        assertThrows(UnauthorizedException.class,
+                ()->{
+                    Auth user = new Auth(110L, "name", new String[]{"USER"});
+                    Owneable obj = new Owneable(110L);
+                    AuthContext authContext = new AuthContext(user, new Dec());
+
+                    authContext.isAuthenticated()
+                            .all(
+                                    (auth) -> auth.isOwner(obj),
+                                    (auth) -> auth.hasAllRoles("ADMIN", "USER")
+                            );
+        });
+    }
+
+    @Test
+    public final void shouldMatchAny() {
+        Auth user = new Auth(110L, "name", new String[]{"ADMIN", "USER"});
+        Owneable obj = new Owneable(220L);
+        AuthContext authContext = new AuthContext(user, new Dec());
+
+        authContext.isAuthenticated()
+                .any(
+                        (auth) -> auth.isOwnerWithRoles(obj, "USER"),
+                        (auth) -> auth.hasAnyRole("ADMIN", "ONE", "TWO")
+                );
+    }
+
+    @Test
+    public final void shouldNotMatchAny() {
+        assertThrows(UnauthorizedException.class,
+                ()->{
+                    Auth user = new Auth(110L, "name", new String[]{"ADMIN", "USER"});
+                    Owneable obj = new Owneable(220L);
+                    AuthContext authContext = new AuthContext(user, new Dec());
+
+                    authContext.isAuthenticated()
+                            .any(
+                                    (auth) -> auth.isOwner(obj),
+                                    (auth) -> auth.hasAnyPermission("ADMIN")
+                            );
+        });
+    }
+
     class Dec implements RolesProvider {
 
         private final Map<String, List<String>> permissions;
@@ -292,6 +323,8 @@ public final class AuthContextTest extends BaseTest {
             return result;
         }
     }
+
+
 
     class Owneable implements Owned {
 

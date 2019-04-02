@@ -3,6 +3,7 @@ package com.ufoscout.vertk.kodein.auth
 import com.ufoscout.coreutils.auth.*
 import com.ufoscout.coreutils.jwt.TokenExpiredException
 import com.ufoscout.coreutils.jwt.kotlin.JwtService
+import com.ufoscout.coreutils.jwt.Token
 import com.ufoscout.vertk.kodein.web.WebException
 import com.ufoscout.vertk.kodein.web.WebExceptionService
 import com.ufoscout.vertk.kodein.web.registerTransformer
@@ -45,7 +46,7 @@ open class AuthContextServiceImpl(
         return from(Auth())
     }
 
-    override fun generateToken(auth: Auth): String {
+    override fun generateToken(auth: Auth): Token {
         return jwtService.generate(auth.username, auth)
     }
 

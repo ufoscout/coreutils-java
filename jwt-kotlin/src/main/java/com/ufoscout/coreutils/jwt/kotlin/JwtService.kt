@@ -1,5 +1,6 @@
 package com.ufoscout.coreutils.jwt.kotlin
 
+import com.ufoscout.coreutils.jwt.Token
 import com.ufoscout.coreutils.jwt.TokenExpiredException
 import java.util.*
 import kotlin.reflect.KClass
@@ -16,7 +17,7 @@ class JwtService(val jwtService: com.ufoscout.coreutils.jwt.JwtService) {
      * @param payload the JWT payload
      * @return
      */
-    fun generate(payload: Any): String {
+    fun generate(payload: Any): Token {
         return jwtService.generate(payload)
     }
 
@@ -26,7 +27,7 @@ class JwtService(val jwtService: com.ufoscout.coreutils.jwt.JwtService) {
      * @param payload the JWT payload
      * @return
      */
-    fun generate(subject: String, payload: Any): String {
+    fun generate(subject: String, payload: Any): Token {
         return jwtService.generate(subject, payload)
     }
 
@@ -38,7 +39,7 @@ class JwtService(val jwtService: com.ufoscout.coreutils.jwt.JwtService) {
      * @param expirationDate the expiration Date
      * @return
      */
-    fun generate(subject: String, payload: Any, createdDate: Date, expirationDate: Date): String {
+    fun generate(subject: String, payload: Any, createdDate: Date, expirationDate: Date): Token {
         return jwtService.generate(subject, payload, createdDate, expirationDate)
     }
 

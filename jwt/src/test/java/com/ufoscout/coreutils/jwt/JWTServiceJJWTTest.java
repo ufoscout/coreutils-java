@@ -3,7 +3,6 @@ package com.ufoscout.coreutils.jwt;
 import com.ufoscout.coreutils.json.JacksonJsonSerializerService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +18,7 @@ public class JWTServiceJJWTTest extends BaseTest {
 
 	@BeforeEach
 	public void setUp() {
-		jwtService = new JwtServiceJJWT(new JwtConfig("secretKey1234567891234sertvewrtbyrbhsyweybrtybwtybwyvsdvsyweysvhgsgv567890sadkfsadihxckvbkasbgkvakcgqirwthwkjbfakfbsl", SignatureAlgorithm.HS512.getValue(), expireMinutes),
+		jwtService = new JwtServiceJJWT(new JwtConfig("secretKey1234567891234secretKey1234567891234secretKey1234567891234", SignatureAlgorithm.HS512.getValue(), expireMinutes),
                 new CoreJsonProvider(new JacksonJsonSerializerService()));
 	}
 
@@ -30,7 +29,8 @@ public class JWTServiceJJWTTest extends BaseTest {
         message.subject = "sub-" + UUID.randomUUID();
         message.sentDate = new Date();
 
-        final String jwt = jwtService.generate(message);
+        Token token = jwtService.generate(message);
+        final String jwt = token.getToken();
         getLogger().info("Generated JWT:\n{}", jwt);
 
         final String parsed = jwtService.getAllClaimsFromToken(jwt).get(JwtServiceJJWT.PAYLOAD_CLAIM_KEY, String.class);
@@ -53,7 +53,8 @@ public class JWTServiceJJWTTest extends BaseTest {
         message.sentDate = new Date();
 
         long beforeTime = new Date().getTime() - 1000;
-        final String jwt = jwtService.generate(message);
+        Token token = jwtService.generate(message);
+        final String jwt = token.getToken();
         getLogger().info("Generated JWT:\n{}", jwt);
 
         long afterTime = new Date().getTime() + 1000;
@@ -65,19 +66,27 @@ public class JWTServiceJJWTTest extends BaseTest {
 
         long expireTime = claims.getExpiration().getTime();
         assertEquals( issuedTime + (expireMinutes * 60 * 1000), expireTime );
+
+        assertTrue( token.getCreatedDate().getTime() >= issuedTime );
+        assertTrue( token.getCreatedDate().getTime() <= (issuedTime + 1000) );
+
+        assertTrue( token.getExpirationDate().getTime() >= expireTime );
+        assertTrue( token.getExpirationDate().getTime() <= (expireTime + 1000) );
+
     }
 
 
     @Test
     public void shouldFailParsingTamperedJwt() {
-        assertThrows(SignatureException.class,
+        assertThrows(io.jsonwebtoken.security.SecurityException.class,
                 ()->{
                     final SimpleMailMessage message = new SimpleMailMessage();
                     message.from = "from-" + UUID.randomUUID();
                     message.subject = "sub-" + UUID.randomUUID();
                     message.sentDate = new Date();
 
-                    final String jwt = jwtService.generate(message);
+                    Token token = jwtService.generate(message);
+                    final String jwt = token.getToken();
                     getLogger().info("Generated JWT:\n{}", jwt);
 
                     jwtService.parse(jwt + 1, String.class);
@@ -89,7 +98,7 @@ public class JWTServiceJJWTTest extends BaseTest {
         assertThrows(TokenExpiredException.class,
                 ()->{
                     final SimpleMailMessage userContext = new SimpleMailMessage();
-                    final String JWT = jwtService.generate("", userContext, new Date(), new Date(System.currentTimeMillis() -1 ));
+                    final String JWT = jwtService.generate("", userContext, new Date(), new Date(System.currentTimeMillis() -1 )).getToken();
                     jwtService.parse(JWT, SimpleMailMessage.class);
                 });
     }
@@ -97,7 +106,7 @@ public class JWTServiceJJWTTest extends BaseTest {
     @Test
     public void shouldAcceptNotExpiredBeans() {
         final SimpleMailMessage userContext = new SimpleMailMessage();
-        final String jwt = jwtService.generate(userContext);
+        final String jwt = jwtService.generate(userContext).getToken();
         assertNotNull(jwtService.parse(jwt, SimpleMailMessage.class));
     }
 

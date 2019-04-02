@@ -3,7 +3,6 @@ package com.ufoscout.vertk.kodein.web
 import com.ufoscout.coreutils.validation.SimpleValidatorService
 import com.ufoscout.vertk.web.postRestAwait
 import io.vertx.kotlin.coroutines.CoroutineVerticle
-import java.lang.RuntimeException
 
 class TestWebController(val routerService: RouterService, val webExceptionService: WebExceptionService): CoroutineVerticle() {
 

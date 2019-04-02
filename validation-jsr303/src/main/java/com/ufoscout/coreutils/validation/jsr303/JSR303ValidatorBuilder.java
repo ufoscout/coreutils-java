@@ -1,6 +1,5 @@
 package com.ufoscout.coreutils.validation.jsr303;
 
-import com.ufoscout.coreutils.validation.Validator;
 import com.ufoscout.coreutils.validation.ValidatorBuilder;
 
 import java.util.function.Function;

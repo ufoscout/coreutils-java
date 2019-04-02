@@ -2,10 +2,8 @@ package com.ufoscout.vertk.kodein.web
 
 import com.ufoscout.coreutils.validation.ValidationException
 import com.ufoscout.vertk.web.endWithJson
-import io.vertx.core.Handler
 import io.vertx.core.Vertx
 import io.vertx.core.http.HttpServerOptions
-import io.vertx.core.http.HttpServerRequest
 import io.vertx.core.http.HttpServerResponse
 import io.vertx.core.logging.LoggerFactory
 import io.vertx.ext.web.Router

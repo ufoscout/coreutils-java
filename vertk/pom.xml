@@ -6,15 +6,16 @@
     <parent>
         <groupId>com.ufoscout.coreutils</groupId>
         <artifactId>coreutils</artifactId>
-        <version>3.7.1-SNAPSHOT</version>
+        <version>3.8.2-SNAPSHOT</version>
     </parent>
 
     <groupId>com.ufoscout.vertk</groupId>
-    <artifactId>vertk-parent</artifactId>
+    <artifactId>vertk-bom</artifactId>
     <packaging>pom</packaging>
 
     <modules>
         <module>vertk-core</module>
+        <module>vertk-cron</module>
         <module>vertk-web-client</module>
         <module>vertk-web</module>
         <module>vertk-kodein</module>
@@ -24,8 +25,8 @@
     </modules>
 
     <properties>
-        <koin.version>2.0.0-alpha-4</koin.version>
-        <vertx.version>3.6.2</vertx.version>
+        <koin.version>2.0.0-rc-2</koin.version>
+        <vertx.version>3.6.3</vertx.version>
     </properties>
 
     <dependencyManagement>
@@ -37,31 +38,48 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
             <dependency>
-                <groupId>com.ufoscout.coreutils</groupId>
-                <artifactId>json-kotlin</artifactId>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.ufoscout.coreutils</groupId>
-                <artifactId>jwt-kotlin</artifactId>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-cron</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.ufoscout.coreutils</groupId>
-                <artifactId>auth</artifactId>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-kodein</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.ufoscout.coreutils</groupId>
-                <artifactId>validation</artifactId>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-kodein-auth-jwt</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-reflect</artifactId>
-                <version>${kotlin.version}</version>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-kodein-mail</artifactId>
+                <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-kodein-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ufoscout.vertk</groupId>
+                <artifactId>vertk-web-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.koin</groupId>
                 <artifactId>koin-core</artifactId>
