@@ -51,7 +51,7 @@
         <!-- dependency versions -->
         <ehcache.version>[3.5.2,3.99.99]</ehcache.version>
         <hibernate-validator.version>[6.0.10.Final,6.99.99]</hibernate-validator.version>
-        <jackson.version>2.9.8</jackson.version>
+        <jackson.version>2.9.9</jackson.version>
         <javax.el.version>[3.0.1-b10,3.99.99]</javax.el.version>
         <jjwt.version>0.10.6</jjwt.version>
         <junit.version>5.4.1</junit.version>
